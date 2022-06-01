@@ -1,19 +1,19 @@
 package com.caled;
 
-public class NumberPickerSelection implements Selection {
+public class numberPickerSelection implements Selection {
     String title;
     int min;
     int max;
     int current;
 
-    NumberPickerSelection(String title, int min, int max, int start) {
+    numberPickerSelection(String title, int min, int max, int start) {
         this.title = title;
         this.min = min;
         this.max = max;
         this.current = start;
     }
 
-    NumberPickerSelection(String title, int min, int max) {
+    numberPickerSelection(String title, int min, int max) {
         this.title = title;
         this.min = min;
         this.max = max;
@@ -21,7 +21,7 @@ public class NumberPickerSelection implements Selection {
     }
 
     public void onInteract(ScreenedApplication app) {
-        this.onLeft();
+        this.onRight();
     }
 
     public void onLeft() {

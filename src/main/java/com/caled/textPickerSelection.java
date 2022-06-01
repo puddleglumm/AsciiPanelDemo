@@ -1,24 +1,24 @@
 package com.caled;
 
-public class TextPickerSelection implements Selection {
+public class textPickerSelection implements Selection {
     String title;
     String[] contents;
     int current;
 
-    TextPickerSelection(String title, String[] options, int start) {
+    textPickerSelection(String title, String[] options, int start) {
         this.title = title;
         this.contents = options;
         this.current = start;
     }
 
-    TextPickerSelection(String title, String[] options) {
+    textPickerSelection(String title, String[] options) {
         this.title = title;
         this.contents = options;
         this.current = 0;
     }
 
     public void onInteract(ScreenedApplication app) {
-        this.onLeft();
+        this.onRight();
     }
 
     public void onLeft() {
