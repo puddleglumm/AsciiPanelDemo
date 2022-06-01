@@ -36,6 +36,8 @@ public class ConnectFourScreen implements Screen {
                     }
                 } else if (input.getKeyCode() == KeyEvent.VK_ENTER && board[0][currentSelection] == 0) {
                     animationProgress = 0;
+                } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    application.setScreen(3);
                 }
             }
             writePlayerPiece(terminal, 30 + (3 * (currentSelection + 1)) - 2, 2, turn);
@@ -111,7 +113,7 @@ public class ConnectFourScreen implements Screen {
     }
 
     private boolean checkWin(int x, int y) {
-        boolean xibl = x > 2;
+        /*boolean xibl = x > 2;
         boolean yibu = y > 3;
         boolean yibd = y < 3;
 
@@ -135,6 +137,55 @@ public class ConnectFourScreen implements Screen {
         } else if (yibd) {
             if (Math.abs(board[y + 1][x] + board[y + 2][x] + board[y + 3][x] + board[y][x]) == 4) { return true; }
         }
+        return false;*/
+        int consecutive_NE = 1;
+        int consecutive_SE = 1;
+        int consecutive_N = 1;
+        int consecutive_E = 1;
+        int last_NE = 0;
+        int last_SE = 0;
+        int last_N = 0;
+        int last_E = 0;
+        for (int i = -3; i < 4; i++) {
+            // E
+            if (0 <= x + i && x + i < board[0].length) {
+                if (board[y][x + i] == last_E) {
+                    consecutive_E++;
+                    if (consecutive_E == 4 && last_E != 0) {
+                        return true;
+                    }
+                } else { last_E = board[y][x + i]; consecutive_E = 1; }
+                // NE
+                if (0 <= y + i && y + i < board.length) {
+                    if (board[y + i][x + i] == last_NE) {
+                        consecutive_NE++;
+                        if (consecutive_NE == 4 && last_NE != 0) {
+                            return true;
+                        }
+                    } else { last_NE = board[y + i][x + i]; consecutive_NE = 1; }
+                }
+                // SE
+                if (0 <= y - i && y - i < board.length) {
+                    if (board[y - i][x + i] == last_SE) {
+                        consecutive_SE++;
+                        if (consecutive_SE == 4 && last_SE != 0) {
+                            return true;
+                        }
+                    } else { last_SE = board[y - i][x + i]; consecutive_SE = 1; }
+                }
+            }
+            // N
+            if (0 <= y + i && y + i < board.length) {
+                if (board[y + i][x] == last_N) {
+                    consecutive_N++;
+                    if (consecutive_N == 4 && last_N != 0) {
+                        return true;
+                    }
+                } else { last_N = board[y + i][x]; consecutive_N = 1; }
+
+            }
+        }
+
         return false;
     }
 }

@@ -47,6 +47,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
         app.screens.add(new SelectionScreen(new String[]{"[   play   ]","[ settings ]","[   quit   ]"}, "Connect Four", app, 2));
         app.screens.add(new ConnectFourScreen());
         app.screens.add(new SelectionScreen(new String[]{"[   play again    ]","[ return to title ]"}, "Red wins!", app, 2));
+        app.screens.add(new SelectionScreen(new String[]{"[    continue     ]","[     restart     ]","[ return to title ]"}, "Paused", app, 2));
         System.out.println(app.currentScreen);
         while (app.run) {
             previousTimeStamp = System.currentTimeMillis();

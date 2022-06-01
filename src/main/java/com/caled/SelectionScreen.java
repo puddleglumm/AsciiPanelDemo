@@ -72,6 +72,12 @@ public class SelectionScreen implements Screen {
         } else if (Objects.equals(optionsList[selectionIndex], "[   play again    ]")) {
             application.resetScreen(1);
             application.setScreen(1);
+        } else if (Objects.equals(optionsList[selectionIndex], "[   play   ]")) {
+            application.resetScreen(1);
+            application.setScreen(1);
+        } else if (Objects.equals(optionsList[selectionIndex], "[   play   ]")) {
+            application.resetScreen(1);
+            application.setScreen(1);
         }
     }
 
