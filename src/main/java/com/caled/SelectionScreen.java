@@ -48,6 +48,8 @@ public class SelectionScreen implements Screen {
             }
         }
         int yPosition = y;
+        terminal.write(dispalyTitle, x - (dispalyTitle.length()/2), yPosition, Color.YELLOW);
+        yPosition += spaceBetweenOptions;
         int i = 0;
         for (String option : optionsList) {
             if (i == currentSelection) {
