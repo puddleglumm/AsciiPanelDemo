@@ -101,11 +101,11 @@ public class ConnectFourScreen implements Screen {
     }
 
     public void reset() {
-        board = new int[7][6];
-        currentSelection = 0;
-        turn = 1;
-        animationProgress = -1;
-        for (int[] ints : board) {
+        this.board = new int[6][7];
+        this.currentSelection = 0;
+        this.turn = 1;
+        this.animationProgress = -1;
+        for (int[] ints : this.board) {
             Arrays.fill(ints, 0);
         }
     }

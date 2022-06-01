@@ -69,7 +69,9 @@ public class ScreenedApplication extends JFrame implements KeyListener
     }
 
     public void resetScreen(int screen) {
-        screens.get(screen).reset();
+        Screen resetScreen = screens.get(screen);
+        resetScreen.reset();
+        screens.set(screen, resetScreen);
     }
 
     public void exit() {
