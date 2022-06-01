@@ -19,7 +19,7 @@ public class SelectionScreen implements Screen {
         spaceBetweenOptions = spacing;
         optionsList = options;
         x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
+        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
     @Deprecated
@@ -31,13 +31,13 @@ public class SelectionScreen implements Screen {
         }
         optionsList = optionSelections;
         x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
+        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
     SelectionScreen(Selection[] options, String title, ScreenedApplication app) {
         optionsList = options;
         x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
+        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
 
@@ -65,7 +65,7 @@ public class SelectionScreen implements Screen {
         }
         int yPosition = y;
         terminal.write(displayTitle, x - (displayTitle.length()/2), yPosition, Color.YELLOW);
-        yPosition += spaceBetweenOptions;
+        yPosition += spaceBetweenOptions * 2;
         int i = 0;
         for (Selection option : optionsList) {
             if (i == currentSelection) {

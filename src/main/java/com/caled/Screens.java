@@ -22,14 +22,14 @@ public class Screens {
         };
 
         Selection[] pauseScreen = new Selection[]{
-                new redirectSelection("[    continue     ]", Screens.CONNECT_4, new int[]{}),
+                new redirectSelection("[    continue     ]", Screens.CONNECT_4),
                 new redirectSelection("[     restart     ]", Screens.CONNECT_4, new int[]{Screens.CONNECT_4}),
-                new redirectSelection("[ return to title ]", Screens.HOME, new int[]{})
+                new redirectSelection("[ return to title ]", Screens.HOME)
         };
 
-        app.screens.add(new SelectionScreen(homeScreen, "Connect Four", app, 2));
+        app.screens.add(new SelectionScreen(homeScreen, "Caleb's Game Collection", app, 2));
         app.screens.add(new ConnectFourScreen());
-        app.screens.add(new SelectionScreen(gameFinishScreen, "Red wins!", app, 2));
+        app.screens.add(new SelectionScreen(gameFinishScreen, "placeholder", app, 2));
         app.screens.add(new SelectionScreen(pauseScreen, "Paused", app, 2));
     }
 }
