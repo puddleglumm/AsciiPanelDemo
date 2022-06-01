@@ -22,6 +22,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
     public ArrayList<Screen> screens = new ArrayList<>();
     private boolean run = true;
 
+    public boolean typing = false;
+
 
     public ScreenedApplication() throws InterruptedException {
         super();

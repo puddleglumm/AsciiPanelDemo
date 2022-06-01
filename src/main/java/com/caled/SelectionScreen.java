@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SelectionScreen implements Screen {
+    private final String[] keyCodeToChar = new String[]{"a","b","c","d","e","f","g","h","i","j", "k","l","m",
+            "n","o","p","q", "r","s","t","u","v","w","x","y","z"};
     private int spaceBetweenOptions = 1;
     private Selection[] optionsList;
     private String displayTitle;
@@ -45,22 +47,40 @@ public class SelectionScreen implements Screen {
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
         for (KeyEvent input : inputs) {
-            if (input.getKeyCode() == KeyEvent.VK_W) {
-                currentSelection -= 1;
-                if (currentSelection < 0) {
-                    currentSelection = optionsList.length - 1;
+            if (application.typing) {
+                TextBoxSelection selectedTB = (TextBoxSelection) optionsList[currentSelection];
+                if (65 <= input.getKeyCode() && input.getKeyCode() <= 90) {
+                    selectedTB.text += keyCodeToChar[input.getKeyCode() - 65];
                 }
-            } else if (input.getKeyCode() == KeyEvent.VK_S) {
-                currentSelection += 1;
-                if (currentSelection >= optionsList.length) {
-                    currentSelection = 0;
+                if (48 <= input.getKeyCode() && input.getKeyCode() <= 57) {
+                    selectedTB.text += String.valueOf(input.getKeyCode() - 48);
                 }
-            } else if (input.getKeyCode() == KeyEvent.VK_ENTER) {
-                onSelection(currentSelection, application);
-            } else if (input.getKeyCode() == KeyEvent.VK_A) {
-                optionsList[currentSelection].onLeft();
-            } else if (input.getKeyCode() == KeyEvent.VK_D) {
-                optionsList[currentSelection].onRight();
+                if (input.getKeyCode() == KeyEvent.VK_SPACE) {
+                    selectedTB.text += " ";
+                }
+                if ((input.getKeyCode() == KeyEvent.VK_BACK_SPACE || input.getKeyCode() == KeyEvent.VK_DELETE) && selectedTB.text.length() > 0) {
+                    selectedTB.text = selectedTB.text.substring(0, selectedTB.text.length() - 1);
+                }
+                if (input.getKeyCode() == KeyEvent.VK_ESCAPE) { application.typing = false; }
+            }
+            else {
+                if (input.getKeyCode() == KeyEvent.VK_W) {
+                    currentSelection -= 1;
+                    if (currentSelection < 0) {
+                        currentSelection = optionsList.length - 1;
+                    }
+                } else if (input.getKeyCode() == KeyEvent.VK_S) {
+                    currentSelection += 1;
+                    if (currentSelection >= optionsList.length) {
+                        currentSelection = 0;
+                    }
+                } else if (input.getKeyCode() == KeyEvent.VK_ENTER) {
+                    onSelection(currentSelection, application);
+                } else if (input.getKeyCode() == KeyEvent.VK_A) {
+                    optionsList[currentSelection].onLeft();
+                } else if (input.getKeyCode() == KeyEvent.VK_D) {
+                    optionsList[currentSelection].onRight();
+                }
             }
         }
         int yPosition = y;

@@ -26,6 +26,7 @@ public class Screens {
         Selection[] debugScreen = new Selection[]{
                 new textPickerSelection("string", new String[]{"opt. 1", "opt. 2", "opt. 3"}),
                 new numberPickerSelection("numbers", 0, 10),
+                new TextBoxSelection("input", "put stuff here"),
                 new redirectSelection("return to title", Screens.HOME)
         };
 
