@@ -19,7 +19,6 @@ public class Screens {
 
         Selection[] gameFinishScreen = new Selection[]{
                 new redirectSelection("play again", Screens.CONNECT_4, new int[]{Screens.CONNECT_4}),
-                new textPickerSelection("game", new String[]{"connect 4", "minesweeper", "snake"}),
                 new redirectSelection("return to title", Screens.HOME, new int[]{Screens.CONNECT_4})
         };
 
