@@ -20,7 +20,7 @@ public class NumberPickerSelection implements Selection {
         this.current = min;
     }
 
-    public void onInteract() {
+    public void onInteract(ScreenedApplication app) {
         this.onLeft();
     }
 

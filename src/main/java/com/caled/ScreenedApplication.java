@@ -13,12 +13,13 @@ import java.util.ArrayList;
  */
 public class ScreenedApplication extends JFrame implements KeyListener
 {
+
     private static final long serialVersionUID = 1060623638149583738L;
 
     private AsciiPanel terminal;
     private ArrayList<KeyEvent> keyPressedSinceLastTick = new ArrayList<>();
     private int currentScreen = 0;
-    private ArrayList<Screen> screens = new ArrayList<>();
+    public ArrayList<Screen> screens = new ArrayList<>();
     private boolean run = true;
 
 
@@ -43,12 +44,9 @@ public class ScreenedApplication extends JFrame implements KeyListener
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);
 
+        Screens.initializeScreens(app);
+
         long previousTimeStamp;
-        app.screens.add(new SelectionScreen(new String[]{"[   play   ]","[ settings ]","[   quit   ]"}, "Connect Four", app, 2));
-        app.screens.add(new ConnectFourScreen());
-        app.screens.add(new SelectionScreen(new String[]{"[   play again    ]","[ return to title ]"}, "Red wins!", app, 2));
-        app.screens.add(new SelectionScreen(new String[]{"[    continue     ]","[     restart     ]","[ return to title ]"}, "Paused", app, 2));
-        System.out.println(app.currentScreen);
         while (app.run) {
             previousTimeStamp = System.currentTimeMillis();
             app.screens.get(app.currentScreen).tick(app, app.keyPressedSinceLastTick);

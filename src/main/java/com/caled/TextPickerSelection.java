@@ -17,7 +17,7 @@ public class TextPickerSelection implements Selection {
         this.current = 0;
     }
 
-    public void onInteract() {
+    public void onInteract(ScreenedApplication app) {
         this.onLeft();
     }
 
@@ -36,6 +36,6 @@ public class TextPickerSelection implements Selection {
     }
 
     public String display() {
-        return title + ": " + contents[current];
+        return (title + ": " + contents[current]);
     }
 }

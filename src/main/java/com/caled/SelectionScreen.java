@@ -9,24 +9,36 @@ import java.util.Objects;
 
 public class SelectionScreen implements Screen {
     private int spaceBetweenOptions = 1;
-    private String[] optionsList;
-    private String dispalyTitle;
+    private Selection[] optionsList;
+    private String displayTitle;
     int currentSelection = 0;
     int x;
     int y;
 
-    SelectionScreen(String[] options, String title, ScreenedApplication app, int spacing) {
+    SelectionScreen(Selection[] options, String title, ScreenedApplication app, int spacing) {
         spaceBetweenOptions = spacing;
         optionsList = options;
         x = app.getTerminal().getWidthInCharacters() / 2;
         y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
-        dispalyTitle = title;
+        displayTitle = title;
     }
-    SelectionScreen(String[] options, String title, ScreenedApplication app) {
+    @Deprecated
+    SelectionScreen(String[] options, String title, ScreenedApplication app, int spacing) {
+        spaceBetweenOptions = spacing;
+        Selection[] optionSelections = new Selection[options.length];
+        for (int i = 0; i < options.length; i++) {
+            optionSelections[i] = new redirectSelection(options[i], Screens.HOME);
+        }
+        optionsList = optionSelections;
+        x = app.getTerminal().getWidthInCharacters() / 2;
+        y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
+        displayTitle = title;
+    }
+    SelectionScreen(Selection[] options, String title, ScreenedApplication app) {
         optionsList = options;
         x = app.getTerminal().getWidthInCharacters() / 2;
         y = (app.getTerminal().getHeightInCharacters() - (optionsList.length * spaceBetweenOptions)) / 2;
-        dispalyTitle = title;
+        displayTitle = title;
     }
 
     public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
@@ -45,17 +57,21 @@ public class SelectionScreen implements Screen {
                 }
             } else if (input.getKeyCode() == KeyEvent.VK_ENTER) {
                 onSelection(currentSelection, application);
+            } else if (input.getKeyCode() == KeyEvent.VK_A) {
+                optionsList[currentSelection].onLeft();
+            } else if (input.getKeyCode() == KeyEvent.VK_D) {
+                optionsList[currentSelection].onRight();
             }
         }
         int yPosition = y;
-        terminal.write(dispalyTitle, x - (dispalyTitle.length()/2), yPosition, Color.YELLOW);
+        terminal.write(displayTitle, x - (displayTitle.length()/2), yPosition, Color.YELLOW);
         yPosition += spaceBetweenOptions;
         int i = 0;
-        for (String option : optionsList) {
+        for (Selection option : optionsList) {
             if (i == currentSelection) {
-                terminal.write(option, x - (option.length()/2), yPosition, Color.YELLOW);
+                terminal.write(option.display(), x - (option.display().length()/2), yPosition, Color.YELLOW);
             } else {
-                terminal.write(option, x - (option.length()/2), yPosition, Color.WHITE);
+                terminal.write(option.display(), x - (option.display().length()/2), yPosition, Color.WHITE);
             }
             yPosition += spaceBetweenOptions;
             i++;
@@ -64,26 +80,30 @@ public class SelectionScreen implements Screen {
     }
 
     private void onSelection(int selectionIndex, ScreenedApplication application) {
-        if (Objects.equals(optionsList[selectionIndex], "[   quit   ]")) {
+        /*String selectionDisplay = optionsList[selectionIndex].display();
+        if (Objects.equals(selectionDisplay, "[   quit   ]")) {
             application.exit();
-        } else if (Objects.equals(optionsList[selectionIndex], "[   play   ]")) {
+        } else if (Objects.equals(selectionDisplay, "[   play   ]")) {
             application.resetScreen(1);
             application.setScreen(1);
-        } else if (Objects.equals(optionsList[selectionIndex], "[ return to title ]")) {
+        } else if (Objects.equals(selectionDisplay, "[ return to title ]")) {
             application.setScreen(0);
-        } else if (Objects.equals(optionsList[selectionIndex], "[   play again    ]")) {
+        } else if (Objects.equals(selectionDisplay, "[   play again    ]")) {
             application.resetScreen(1);
             application.setScreen(1);
-        } else if (Objects.equals(optionsList[selectionIndex], "[    continue     ]")) {
+        } else if (Objects.equals(selectionDisplay, "[    continue     ]")) {
             application.setScreen(1);
-        } else if (Objects.equals(optionsList[selectionIndex], "[     restart     ]")) {
+        } else if (Objects.equals(selectionDisplay, "[     restart     ]")) {
             application.resetScreen(1);
             application.setScreen(1);
-        }
+        } else {
+           optionsList[selectionIndex].onInteract(application);
+        }*/
+        optionsList[selectionIndex].onInteract(application);
     }
 
-    public void setDispalyTitle(String title) {
-        dispalyTitle = title;
+    public void setDisplayTitle(String title) {
+        displayTitle = title;
     }
 
     public void reset() {

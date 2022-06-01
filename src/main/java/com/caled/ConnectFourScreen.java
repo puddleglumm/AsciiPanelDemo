@@ -47,9 +47,9 @@ public class ConnectFourScreen implements Screen {
                 if (checkWin(currentSelection,animationProgress)) {
                     SelectionScreen winScreen = (SelectionScreen) application.getScreen(2);
                     if (turn == -1) {
-                        winScreen.setDispalyTitle("Yellow wins!");
+                        winScreen.setDisplayTitle("Yellow wins!");
                     } else {
-                        winScreen.setDispalyTitle("Red wins!");
+                        winScreen.setDisplayTitle("Red wins!");
                     }
                     application.setScreen(2);
                 } else { animationProgress = -1; turn *= -1; }
