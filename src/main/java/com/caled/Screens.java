@@ -39,6 +39,6 @@ public class Screens {
         app.screens.add(new ConnectFourScreen());
         app.screens.add(new SelectionScreen(gameFinishScreen, "placeholder", app, 2));
         app.screens.add(new SelectionScreen(pauseScreen, "Paused", app, 2));
-        app.screens.add(new SelectionScreen(debugScreen, "debug", app, 2));
+        app.screens.add(new DebugScreen(debugScreen, "debug", app, 2));
     }
 }
