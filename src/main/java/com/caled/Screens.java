@@ -6,20 +6,23 @@ public class Screens {
     public static final int GAME_FINISH = 2;
     public static final int PAUSE = 3;
     public static final int DEBUG = 4;
+    public static final int MINESWEEPER = 5;
     public static final int KILL = -1;
+    public static final int LAST = -2;
 
     public static void initializeScreens(ScreenedApplication app) {
 
         Selection[] homeScreen = new Selection[]{
-                new redirectSelection("play", Screens.CONNECT_4, new int[]{Screens.CONNECT_4}),
+                new redirectSelection("play connect 4", Screens.CONNECT_4, Screens.CONNECT_4),
+                new redirectSelection("play minesweeper", Screens.MINESWEEPER, Screens.MINESWEEPER),
                 new textPickerSelection("game", new String[]{"connect 4", "minesweeper", "snake"}),
                 new redirectSelection("debug", Screens.DEBUG),
                 new redirectSelection("quit", Screens.KILL)
         };
 
         Selection[] gameFinishScreen = new Selection[]{
-                new redirectSelection("play again", Screens.CONNECT_4, new int[]{Screens.CONNECT_4}),
-                new redirectSelection("return to title", Screens.HOME, new int[]{Screens.CONNECT_4})
+                new redirectSelection("play again", Screens.CONNECT_4, Screens.CONNECT_4),
+                new redirectSelection("return to title", Screens.HOME, Screens.CONNECT_4)
         };
 
         Selection[] debugScreen = new Selection[]{
@@ -31,7 +34,7 @@ public class Screens {
 
         Selection[] pauseScreen = new Selection[]{
                 new redirectSelection("continue", Screens.CONNECT_4),
-                new redirectSelection("restart", Screens.CONNECT_4, new int[]{Screens.CONNECT_4}),
+                new redirectSelection("restart", Screens.CONNECT_4, Screens.CONNECT_4),
                 new redirectSelection("return to title", Screens.HOME)
         };
 
@@ -40,5 +43,6 @@ public class Screens {
         app.screens.add(new SelectionScreen(gameFinishScreen, "placeholder", app, 2));
         app.screens.add(new SelectionScreen(pauseScreen, "Paused", app, 2));
         app.screens.add(new DebugScreen(debugScreen, "debug", app, 2));
+        app.screens.add(new MinesweeperScreen());
     }
 }
