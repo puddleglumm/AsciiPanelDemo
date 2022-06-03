@@ -21,8 +21,8 @@ public class Screens {
         };
 
         Selection[] gameFinishScreen = new Selection[]{
-                new redirectSelection("play again", Screens.CONNECT_4, Screens.CONNECT_4),
-                new redirectSelection("return to title", Screens.HOME, Screens.CONNECT_4)
+                new redirectSelection("play again", Screens.LAST, Screens.LAST),
+                new redirectSelection("return to title", Screens.HOME, Screens.LAST)
         };
 
         Selection[] debugScreen = new Selection[]{
@@ -33,8 +33,8 @@ public class Screens {
         };
 
         Selection[] pauseScreen = new Selection[]{
-                new redirectSelection("continue", Screens.CONNECT_4),
-                new redirectSelection("restart", Screens.CONNECT_4, Screens.CONNECT_4),
+                new redirectSelection("continue", Screens.LAST),
+                new redirectSelection("restart", Screens.LAST, Screens.LAST),
                 new redirectSelection("return to title", Screens.HOME)
         };
 

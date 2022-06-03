@@ -25,11 +25,7 @@ public class redirectSelection implements Selection {
         for (int i : resets) {
             app.resetScreen(i);
         }
-        if (redirect == Screens.KILL) {
-            System.exit(0);
-        } else {
-            app.setScreen(redirect);
-        }
+        app.setScreen(redirect);
     }
 
     public void onLeft() {

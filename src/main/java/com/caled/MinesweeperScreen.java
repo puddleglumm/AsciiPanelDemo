@@ -37,8 +37,8 @@ public class MinesweeperScreen implements Screen {
     }
 
     private void renderBoard(AsciiPanel terminal) {
-        for (int i_y = 0; i_y < 9 /*board.getHeight()*/; i_y++) {
-            for (int i_x = 0; i_x < 9 /*board.getWidth()*/; i_x++) {
+        for (int i_y = 0; i_y < board.height(); i_y++) {
+            for (int i_x = 0; i_x < board.width(); i_x++) {
                 Color textColor = Color.WHITE;
                 if (i_x == cursorX && i_y == cursorY) { textColor = Color.YELLOW; }
                 terminal.write(displayTileAt(i_x, i_y), i_x, i_y, textColor);
@@ -66,23 +66,23 @@ public class MinesweeperScreen implements Screen {
 
             if (keyCode == KeyEvent.VK_W) {
                 cursorY -= 1;
-                if (cursorY < 0 /*board.getHeight()*/) {
-                    cursorY = 9 /*board.getHeight()*/ - 1;
+                if (cursorY < 0) {
+                    cursorY = board.height() - 1;
                 }
             } else if (keyCode == KeyEvent.VK_S) {
                 cursorY += 1;
-                if (cursorY >= 9 /*board.getHeight()*/) {
+                if (cursorY >= board.height()) {
                     cursorY = 0;
                 }
             } else if (keyCode == KeyEvent.VK_D) {
                 cursorX += 1;
-                if (cursorX >= 9 /*board.getWidth()*/) {
+                if (cursorX >= board.width()) {
                     cursorX = 0;
                 }
             } else if (keyCode == KeyEvent.VK_A) {
                 cursorX -= 1;
                 if (cursorX < 0) {
-                    cursorX = 9 /*board.getWidth()*/ - 1;
+                    cursorX = board.width() - 1;
                 }
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (board.hasMineAt(cursorX, cursorY)) {
@@ -92,6 +92,8 @@ public class MinesweeperScreen implements Screen {
                 } else if (!board.isRevealedAt(cursorX, cursorY)) {
                     board.playerInteractAt(cursorX, cursorY);
                 }
+            } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                application.setScreen(Screens.PAUSE);
             }
         }
     }

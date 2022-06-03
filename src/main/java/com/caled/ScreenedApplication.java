@@ -19,8 +19,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
     private AsciiPanel terminal;
     private ArrayList<KeyEvent> keyPressedSinceLastTick = new ArrayList<>();
     private int currentScreen = 0;
+    private int lastScreen = 0;
     public ArrayList<Screen> screens = new ArrayList<>();
-    private boolean run = true;
 
     public boolean typing = false;
 
@@ -49,13 +49,12 @@ public class ScreenedApplication extends JFrame implements KeyListener
         Screens.initializeScreens(app);
 
         long previousTimeStamp;
-        while (app.run) {
+        while (true) {
             previousTimeStamp = System.currentTimeMillis();
             app.screens.get(app.currentScreen).tick(app, app.keyPressedSinceLastTick);
             app.keyPressedSinceLastTick.clear();
             Thread.sleep(100 - (System.currentTimeMillis() - previousTimeStamp));
         }
-        System.exit(0);
     }
     public AsciiPanel getTerminal() {
         return this.terminal;
@@ -66,16 +65,29 @@ public class ScreenedApplication extends JFrame implements KeyListener
     }
 
     public void setScreen(int screen) {
-        currentScreen = screen;
+        if (screen == Screens.KILL) {
+            System.exit(0);
+        } else if (screen == Screens.LAST) {
+            int temp = lastScreen;
+            lastScreen = currentScreen;
+            currentScreen = temp;
+        } else {
+            lastScreen = currentScreen;
+            currentScreen = screen;
+        }
     }
 
     public void resetScreen(int screen) {
-        Screen resetScreen = screens.get(screen);
-        resetScreen.reset();
-        screens.set(screen, resetScreen);
+        Screen resetScreen;
+        if (screen == Screens.LAST) {
+            resetScreen = screens.get(lastScreen);
+            resetScreen.reset();
+            screens.set(lastScreen, resetScreen);
+        } else if (!(screen == Screens.KILL)) {
+            resetScreen = screens.get(screen);
+            resetScreen.reset();
+            screens.set(screen, resetScreen);
+        }
     }
 
-    public void exit() {
-        run = false;
-    }
 }
