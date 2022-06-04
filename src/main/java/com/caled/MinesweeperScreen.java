@@ -24,8 +24,14 @@ public class MinesweeperScreen implements Screen {
             board.continueRevealing();
         }
 
-        renderBoard(terminal);
+        // TODO: create checkWin() function
+        /*if (board.checkWin()) {
+            SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
+            winScreen.setDisplayTitle("You won!");
+            application.setScreen(Screens.GAME_FINISH);
+        }*/
 
+        renderBoard(terminal);
         terminal.repaint();
     }
 
@@ -40,24 +46,18 @@ public class MinesweeperScreen implements Screen {
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {
                 Color textColor = Color.WHITE;
-                if (i_x == cursorX && i_y == cursorY) { textColor = Color.YELLOW; }
-                terminal.write(displayTileAt(i_x, i_y), i_x, i_y, textColor);
+                if (i_x == cursorX && i_y == cursorY) { textColor = Color.GREEN; }
+                terminal.write(getDisplayCharForTileAt(i_x, i_y), (i_x * 2) + 10, (i_y), textColor);
             }
         }
     }
 
-    private String displayTileAt(int x, int y) {
-        if (board.isRevealedAt(x, y)) {
-            int adjacentMines = board.adjacentMinesAt(x, y);
-
-            if (adjacentMines == 0) {
-                return ".";
-            } else {
-                return String.valueOf(adjacentMines);
-            }
-        } else {
-            return "#";
-        }
+    private String getDisplayCharForTileAt(int x, int y) {
+        // TODO: implement isFlaggedAt(x, y)
+        //if (board.isFlaggedAt(x, y))          { return "P"; }
+        if (!board.isRevealedAt(x, y))        { return "#"; }
+        if (board.adjacentMinesAt(x, y) == 0) { return "."; }
+        return String.valueOf(board.adjacentMinesAt(x, y));
     }
 
     private void processInputs(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
@@ -84,12 +84,16 @@ public class MinesweeperScreen implements Screen {
                 if (cursorX < 0) {
                     cursorX = board.width() - 1;
                 }
+            } else if (keyCode == KeyEvent.VK_F) {
+                // TODO: implements toggleFlagAt(x, y)
+                //board.toggleFlagAt(cursorX, cursorY);
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (board.hasMineAt(cursorX, cursorY)) {
                     SelectionScreen loseScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
                     loseScreen.setDisplayTitle("You lost");
                     application.setScreen(Screens.GAME_FINISH);
-                } else if (!board.isRevealedAt(cursorX, cursorY)) {
+                // TODO: isFlaggedAt(x, y)
+                } else if (!board.isRevealedAt(cursorX, cursorY) /*&& !board.isFlaggedAt(cursorX, cursorY)*/) {
                     board.playerInteractAt(cursorX, cursorY);
                 }
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
