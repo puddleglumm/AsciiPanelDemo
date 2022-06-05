@@ -3,15 +3,30 @@ package com.caled;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import asciiPanel.AsciiPanel;
 import com.github.puddleglumm.minesweeper.*;
 
 public class MinesweeperScreen implements Screen {
 
-    Board board = new Board();
+    Board board = new Board(20, 20, 21);
     int cursorX = 0;
     int cursorY = 0;
+    HashMap<String, Color> colorForTile = new HashMap<String, Color>() {{
+        put("#", Color.LIGHT_GRAY);
+        put(".", Color.DARK_GRAY);
+        put("1", Color.BLUE);
+        put("2", Color.GREEN);
+        put("3", Color.RED);
+        put("4", new Color(0, 0, 120));
+        put("5", new Color(120, 0, 0));
+        put("6", new Color(0, 110, 110));
+        put("7", Color.BLACK);
+        put("8", Color.DARK_GRAY);
+        put("\u00E2", Color.ORANGE);
+    }};
 
     @Override
     public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
@@ -21,7 +36,7 @@ public class MinesweeperScreen implements Screen {
         if (!board.revealInProgress()) {
             processInputs(application, inputs);
         } else {
-            board.continueRevealing(1);
+            board.continueRevealing();
         }
 
         if (board.checkWin()) {
@@ -36,7 +51,7 @@ public class MinesweeperScreen implements Screen {
 
     @Override
     public void reset() {
-        board = new Board();
+        board = new Board(20, 20, 21);
         cursorX = 0;
         cursorY = 0;
     }
@@ -44,18 +59,21 @@ public class MinesweeperScreen implements Screen {
     private void renderBoard(AsciiPanel terminal) {
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {
-                Color textColor = Color.WHITE;
-                if (board.isFlaggedAt(i_x, i_y)) { textColor = Color.RED; }
-                if (i_x == cursorX && i_y == cursorY) { textColor = Color.GREEN; }
+
                 int offsetX = terminal.getWidthInCharacters()/2 - board.width();
                 int offsetY = (terminal.getHeightInCharacters() - board.height())/2;
-                terminal.write(getDisplayCharForTileAt(i_x, i_y), (i_x * 2) + offsetX, (i_y) + offsetY, textColor);
+
+                String display = getDisplayCharForTileAt(i_x, i_y);
+                Color bgColor = terminal.getDefaultBackgroundColor();
+                if (i_x == cursorX && i_y == cursorY) { bgColor = new Color(160, 130, 0); }
+
+                terminal.write(display, (i_x * 2) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
             }
         }
     }
 
     private String getDisplayCharForTileAt(int x, int y) {
-        if (board.isFlaggedAt(x, y))          { return "P"; }
+        if (board.isFlaggedAt(x, y))          { return "\u00E2"; }
         if (!board.isRevealedAt(x, y))        { return "#"; }
         if (board.adjacentMinesAt(x, y) == 0) { return "."; }
         return String.valueOf(board.adjacentMinesAt(x, y));
@@ -86,7 +104,9 @@ public class MinesweeperScreen implements Screen {
                     cursorX = board.width() - 1;
                 }
             } else if (keyCode == KeyEvent.VK_F) {
-                board.toggleFlagAt(cursorX, cursorY);
+                if (!board.isRevealedAt(cursorX, cursorY)) {
+                    board.toggleFlagAt(cursorX, cursorY);
+                }
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (board.hasMineAt(cursorX, cursorY)) {
                     SelectionScreen loseScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);

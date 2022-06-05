@@ -1,5 +1,6 @@
 package com.caled;
 
+import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
 
 import javax.swing.*;
@@ -27,7 +28,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
 
     public ScreenedApplication() throws InterruptedException {
         super();
-        terminal = new AsciiPanel(80, 24);
+        AsciiFont font = new AsciiFont("msFlag_9x16.png", 9, 16);
+        terminal = new AsciiPanel(80, 24, font);
         add(terminal);
         pack();
         addKeyListener(this);
@@ -43,6 +45,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
 
     public static void main(String[] args) throws InterruptedException {
         ScreenedApplication app = new ScreenedApplication();
+        app.setResizable(false);
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);
 
