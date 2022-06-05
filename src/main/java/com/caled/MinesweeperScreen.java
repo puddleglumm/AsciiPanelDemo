@@ -14,9 +14,12 @@ public class MinesweeperScreen implements Screen {
     Board board = new Board(20, 20, 21);
     int cursorX = 0;
     int cursorY = 0;
+    private final String flagChar = "\u00E2";
+    private final String unrevealedTileChar = "#";
+    private final String emptyTileChar = ".";
     HashMap<String, Color> colorForTile = new HashMap<String, Color>() {{
-        put("#", Color.LIGHT_GRAY);
-        put(".", Color.DARK_GRAY);
+        put(unrevealedTileChar, Color.LIGHT_GRAY);
+        put(emptyTileChar, Color.DARK_GRAY);
         put("1", Color.BLUE);
         put("2", Color.GREEN);
         put("3", Color.RED);
@@ -25,7 +28,7 @@ public class MinesweeperScreen implements Screen {
         put("6", new Color(0, 110, 110));
         put("7", Color.BLACK);
         put("8", Color.DARK_GRAY);
-        put("\u00E2", Color.ORANGE);
+        put(flagChar, Color.ORANGE);
     }};
 
     @Override
@@ -73,9 +76,9 @@ public class MinesweeperScreen implements Screen {
     }
 
     private String getDisplayCharForTileAt(int x, int y) {
-        if (board.isFlaggedAt(x, y))          { return "\u00E2"; }
-        if (!board.isRevealedAt(x, y))        { return "#"; }
-        if (board.adjacentMinesAt(x, y) == 0) { return "."; }
+        if (board.isFlaggedAt(x, y))          { return flagChar; }
+        if (!board.isRevealedAt(x, y))        { return unrevealedTileChar; }
+        if (board.adjacentMinesAt(x, y) == 0) { return emptyTileChar; }
         return String.valueOf(board.adjacentMinesAt(x, y));
     }
 

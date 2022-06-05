@@ -39,4 +39,16 @@ public class redirectSelection implements Selection {
     public String display() {
         return title;
     }
+
+    public void setRedirect(int redirect) {
+        this.redirect = redirect;
+    }
+
+    public void setResets(int[] resets) {
+        this.resets = resets;
+    }
+
+    public void setReset(int reset) {
+        this.resets = new int[]{ reset };
+    }
 }
