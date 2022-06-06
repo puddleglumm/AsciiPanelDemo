@@ -49,20 +49,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
 
     public static void main(String[] args) throws InterruptedException {
         ScreenedApplication app = new ScreenedApplication();
-        app.setResizable(false);
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        app.setVisible(true);
 
-        Screens.initializeScreens(app);
-        app.setScreen(0);
-
-        long previousTimeStamp;
-        while (true) {
-            previousTimeStamp = System.currentTimeMillis();
-            app.screens.get(app.currentScreen).tick(app, app.keyPressedSinceLastTick);
-            app.keyPressedSinceLastTick.clear();
-            Thread.sleep(app.mspt - (System.currentTimeMillis() - previousTimeStamp));
-        }
+        app.run();
     }
     public AsciiPanel getTerminal() {
         return this.terminal;
@@ -109,5 +97,26 @@ public class ScreenedApplication extends JFrame implements KeyListener
 
     public int heightInChars() {
         return windowSize.height / terminal.getCharHeight();
+    }
+
+    private void init() {
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        Screens.initializeScreens(this);
+        setScreen(0);
+    }
+
+    public void run() throws InterruptedException {
+        init();
+
+        long previousTimeStamp;
+        while (true) {
+            previousTimeStamp = System.currentTimeMillis();
+            screens.get(currentScreen).tick(this, keyPressedSinceLastTick);
+            keyPressedSinceLastTick.clear();
+            Thread.sleep(mspt - (System.currentTimeMillis() - previousTimeStamp));
+        }
     }
 }
