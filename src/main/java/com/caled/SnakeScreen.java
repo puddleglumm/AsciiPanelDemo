@@ -1,5 +1,6 @@
 package com.caled;
 
+import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
 
 import java.awt.*;
@@ -19,11 +20,17 @@ public class SnakeScreen implements Screen {
     }};
 
     @Override
+    public AsciiFont getFont() {
+        return AsciiFont.CP437_12x12;
+    }
+
+    @Override
     public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
 
         processInputs(application, inputs);
+
         if (!updateSnakePosition()) {
             SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
             winScreen.setDisplayTitle(String.format("You finished! Score: %s", snakePoints.size()));
@@ -80,27 +87,23 @@ public class SnakeScreen implements Screen {
     }
 
     private void processInputs(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+
+        boolean changedDir = false;
         for (KeyEvent input : inputs) {
             int keyCode = input.getKeyCode();
 
-            if (keyCode == KeyEvent.VK_W) {
-                if (Math.abs(snakeDirection) == 1) {
-                    snakeDirection = -2;
-                }
-            } else if (keyCode == KeyEvent.VK_S) {
-                if (Math.abs(snakeDirection) == 1) {
-                    snakeDirection = 2;
-                }
-            } else if (keyCode == KeyEvent.VK_D) {
-
-                if (Math.abs(snakeDirection) == 2) {
-                    snakeDirection = 1;
-                }
-            } else if (keyCode == KeyEvent.VK_A) {
-
-                if (Math.abs(snakeDirection) == 2) {
-                    snakeDirection = -1;
-                }
+            if (keyCode == KeyEvent.VK_W && !changedDir && Math.abs(snakeDirection) == 1) {
+                changedDir = true;
+                snakeDirection = -2;
+            } else if (keyCode == KeyEvent.VK_S && !changedDir && Math.abs(snakeDirection) == 1) {
+                changedDir = true;
+                snakeDirection = 2;
+            } else if (keyCode == KeyEvent.VK_D && !changedDir && Math.abs(snakeDirection) == 2) {
+                changedDir = true;
+                snakeDirection = 1;
+            } else if (keyCode == KeyEvent.VK_A && !changedDir && Math.abs(snakeDirection) == 2) {
+                changedDir = true;
+                snakeDirection = -1;
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 application.setScreen(Screens.PAUSE);
             }
