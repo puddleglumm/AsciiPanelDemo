@@ -11,6 +11,8 @@ public class SnakeScreen implements Screen {
 
    int snakeDirection = 1;
     Stack<Point> snakePoints = new Stack<Point>(){{
+        add(new Point(4, 0));
+        add(new Point(3, 0));
         add(new Point(2, 0));
         add(new Point(1, 0));
         add(new Point(0, 0));
@@ -22,14 +24,17 @@ public class SnakeScreen implements Screen {
         terminal.clear();
 
         processInputs(application, inputs);
-        updateSnakePosition();
+        if (!updateSnakePosition()) {
+            SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
+            winScreen.setDisplayTitle(String.format("You finished! Score: %s", snakePoints.size()));
+            application.setScreen(Screens.GAME_FINISH);
+        }
         renderBoard(terminal);
 
         terminal.repaint();
     }
 
-    private void updateSnakePosition() {
-        snakePoints.remove(snakePoints.size() - 1);
+    private boolean updateSnakePosition() {
 
         Point next = new Point(snakePoints.get(0));
         if (Math.abs(snakeDirection) == 1) {
@@ -38,13 +43,30 @@ public class SnakeScreen implements Screen {
             next.y += (snakeDirection / 2);
         }
 
-        snakePoints.insertElementAt(next, 0);
+        boolean stillInBounds = (0 <= next.y && next.y < 24) && (0 <= next.x && next.x < 80);
+        boolean collidedWithSelf = false;
+        for (Point segment : snakePoints) {
+            if (segment.x == next.x && segment.y == next.y) {
+                collidedWithSelf = true;
+                break;
+            }
+        }
+
+        if (stillInBounds && !collidedWithSelf) {
+            snakePoints.remove(snakePoints.size() - 1);
+            snakePoints.insertElementAt(next, 0);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void reset() {
         snakeDirection = 1;
         snakePoints = new Stack<Point>(){{
+            add(new Point(4, 0));
+            add(new Point(3, 0));
             add(new Point(2, 0));
             add(new Point(1, 0));
             add(new Point(0, 0));
