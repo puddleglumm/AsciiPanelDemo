@@ -21,6 +21,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
     private ArrayList<KeyEvent> keyPressedSinceLastTick = new ArrayList<>();
     private int currentScreen = 0;
     private int lastScreen = 0;
+    private int mspt = 100;
     public ArrayList<Screen> screens = new ArrayList<>();
 
     public boolean typing = false;
@@ -50,13 +51,14 @@ public class ScreenedApplication extends JFrame implements KeyListener
         app.setVisible(true);
 
         Screens.initializeScreens(app);
+        app.setScreen(0);
 
         long previousTimeStamp;
         while (true) {
             previousTimeStamp = System.currentTimeMillis();
             app.screens.get(app.currentScreen).tick(app, app.keyPressedSinceLastTick);
             app.keyPressedSinceLastTick.clear();
-            Thread.sleep(100 - (System.currentTimeMillis() - previousTimeStamp));
+            Thread.sleep(app.mspt - (System.currentTimeMillis() - previousTimeStamp));
         }
     }
     public AsciiPanel getTerminal() {
@@ -78,6 +80,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
             lastScreen = currentScreen;
             currentScreen = screen;
         }
+        terminal.setAsciiFont(getScreen(currentScreen).getFont());
+        mspt = getScreen(currentScreen).getMsPerTick();
     }
 
     public void resetScreen(int screen) {
