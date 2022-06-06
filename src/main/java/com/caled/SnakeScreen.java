@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class SnakeScreen implements Screen {
-
    int snakeDirection = 1;
     Stack<Point> snakePoints = new Stack<Point>(){{
         add(new Point(4, 0));
@@ -32,9 +31,8 @@ public class SnakeScreen implements Screen {
         processInputs(application, inputs);
 
         if (!updateSnakePosition()) {
-            SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
-            winScreen.setDisplayTitle(String.format("You finished! Score: %s", snakePoints.size()));
-            application.setScreen(Screens.GAME_FINISH);
+            String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size());
+            Screens.goToGameFinishScreen(application, finishScreenTitle);
         }
         renderBoard(terminal);
 

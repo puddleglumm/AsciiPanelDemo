@@ -45,13 +45,11 @@ public class ConnectFourScreen implements Screen {
             if (animationProgress == board.length - 1 || board[animationProgress + 1][currentSelection] != 0) {
                 board[animationProgress][currentSelection] = turn;
                 if (checkWin(currentSelection,animationProgress)) {
-                    SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
                     if (turn == -1) {
-                        winScreen.setDisplayTitle("Yellow wins!");
+                        Screens.goToGameFinishScreen(application, "Yellow wins!");
                     } else {
-                        winScreen.setDisplayTitle("Red wins!");
+                        Screens.goToGameFinishScreen(application, "Red wins!");
                     }
-                    application.setScreen(Screens.GAME_FINISH);
                 } else { animationProgress = -1; turn *= -1; }
 
             } else {

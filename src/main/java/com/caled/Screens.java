@@ -48,4 +48,10 @@ public class Screens {
         app.screens.add(new MinesweeperScreen());
         app.screens.add(new SnakeScreen());
     }
+
+    public static void goToGameFinishScreen(ScreenedApplication app, String title) {
+        SelectionScreen winScreen = (SelectionScreen) app.getScreen(Screens.GAME_FINISH);
+        winScreen.setDisplayTitle(title);
+        app.setScreen(Screens.GAME_FINISH);
+    }
 }

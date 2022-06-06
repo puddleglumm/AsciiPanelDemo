@@ -60,6 +60,10 @@ public class ScreenedApplication extends JFrame implements KeyListener
         return screens.get(screen);
     }
 
+    public Screen getCurrentScreen() {
+        return screens.get(currentScreen);
+    }
+
     public void setScreen(int screen) {
         if (screen == Screens.KILL) {
             System.exit(0);
@@ -72,9 +76,9 @@ public class ScreenedApplication extends JFrame implements KeyListener
             currentScreen = screen;
         }
         // TODO: Make resizing functional
-        AsciiFont newFont = getScreen(currentScreen).getFont();
+        AsciiFont newFont = getCurrentScreen().getFont();
         terminal.setAsciiFont(newFont);
-        mspt = getScreen(currentScreen).getMsPerTick();
+        mspt = getCurrentScreen().getMsPerTick();
     }
 
     public void resetScreen(int screen) {
@@ -114,7 +118,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
         long previousTimeStamp;
         while (true) {
             previousTimeStamp = System.currentTimeMillis();
-            screens.get(currentScreen).tick(this, keyPressedSinceLastTick);
+            getCurrentScreen().tick(this, keyPressedSinceLastTick);
             keyPressedSinceLastTick.clear();
             Thread.sleep(mspt - (System.currentTimeMillis() - previousTimeStamp));
         }

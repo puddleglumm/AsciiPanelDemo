@@ -43,9 +43,7 @@ public class MinesweeperScreen implements Screen {
         }
 
         if (board.checkWin()) {
-            SelectionScreen winScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
-            winScreen.setDisplayTitle("You won!");
-            application.setScreen(Screens.GAME_FINISH);
+            Screens.goToGameFinishScreen(application, "You win!");
         }
 
         renderBoard(application);
@@ -112,9 +110,7 @@ public class MinesweeperScreen implements Screen {
                 }
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (board.hasMineAt(cursorX, cursorY)) {
-                    SelectionScreen loseScreen = (SelectionScreen) application.getScreen(Screens.GAME_FINISH);
-                    loseScreen.setDisplayTitle("You lost");
-                    application.setScreen(Screens.GAME_FINISH);
+                    Screens.goToGameFinishScreen(application, "You lost");
                 } else if (!board.isRevealedAt(cursorX, cursorY) && !board.isFlaggedAt(cursorX, cursorY)) {
                     board.startRevealAt(cursorX, cursorY);
                 }
