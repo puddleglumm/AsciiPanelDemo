@@ -87,6 +87,12 @@ public class DebugScreen implements Screen {
         }
         terminal.write(keyStrokes, 0, 0, Color.ORANGE);
         int yPosition = y;
+        terminal.write("\u00E1", 0, 23, Color.DARK_GRAY);
+        terminal.write("\u00E1", 1, 23, Color.WHITE);
+        terminal.write("\u00E1", 2, 23, Color.RED);
+        terminal.write("\u00E1", 3, 23, Color.GREEN);
+        terminal.write("\u00E1", 4, 23, Color.BLUE);
+        terminal.write("\u00E1", 5, 23, Color.PINK);
         terminal.write(displayTitle, x - (displayTitle.length()/2), yPosition, Color.YELLOW);
         yPosition += spaceBetweenOptions * 2;
         int i = 0;
