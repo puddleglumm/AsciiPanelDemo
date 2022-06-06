@@ -4,6 +4,7 @@ import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
     private int currentScreen = 0;
     private int lastScreen = 0;
     private int mspt = 100;
+
+    private Dimension windowSize = new Dimension(864, 576);
     public ArrayList<Screen> screens = new ArrayList<>();
 
     public boolean typing = false;
@@ -30,9 +33,9 @@ public class ScreenedApplication extends JFrame implements KeyListener
     public ScreenedApplication() throws InterruptedException {
         super();
         AsciiFont font = new AsciiFont("msFlag_9x16.png", 9, 16);
-        terminal = new AsciiPanel(80, 24, font);
+        terminal = new AsciiPanel(96, 48, font);
+        setSize(windowSize);
         add(terminal);
-        pack();
         addKeyListener(this);
     }
 
@@ -80,7 +83,9 @@ public class ScreenedApplication extends JFrame implements KeyListener
             lastScreen = currentScreen;
             currentScreen = screen;
         }
-        terminal.setAsciiFont(getScreen(currentScreen).getFont());
+        // TODO: Make resizing functional
+        AsciiFont newFont = getScreen(currentScreen).getFont();
+        terminal.setAsciiFont(newFont);
         mspt = getScreen(currentScreen).getMsPerTick();
     }
 
@@ -97,4 +102,12 @@ public class ScreenedApplication extends JFrame implements KeyListener
         }
     }
 
+    public int widthInChars() {
+        return windowSize.width / terminal.getCharWidth();
+    }
+
+
+    public int heightInChars() {
+        return windowSize.height / terminal.getCharHeight();
+    }
 }

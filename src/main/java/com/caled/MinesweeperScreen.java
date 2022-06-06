@@ -48,7 +48,7 @@ public class MinesweeperScreen implements Screen {
             application.setScreen(Screens.GAME_FINISH);
         }
 
-        renderBoard(terminal);
+        renderBoard(application);
         terminal.repaint();
     }
 
@@ -59,18 +59,18 @@ public class MinesweeperScreen implements Screen {
         cursorY = 0;
     }
 
-    private void renderBoard(AsciiPanel terminal) {
+    private void renderBoard(ScreenedApplication app) {
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {
 
-                int offsetX = terminal.getWidthInCharacters()/2 - board.width();
-                int offsetY = (terminal.getHeightInCharacters() - board.height())/2;
+                int offsetX = app.widthInChars()/2 - board.width();
+                int offsetY = (app.heightInChars() - board.height())/2;
 
                 String display = getDisplayCharForTileAt(i_x, i_y);
-                Color bgColor = terminal.getDefaultBackgroundColor();
+                Color bgColor = app.getTerminal().getDefaultBackgroundColor();
                 if (i_x == cursorX && i_y == cursorY) { bgColor = new Color(160, 130, 0); }
 
-                terminal.write(display, (i_x * 2) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
+                app.getTerminal().write(display, (i_x * 2) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
             }
         }
     }

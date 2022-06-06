@@ -20,8 +20,8 @@ public class SelectionScreen implements Screen {
     SelectionScreen(Selection[] options, String title, ScreenedApplication app, int spacing) {
         spaceBetweenOptions = spacing;
         optionsList = options;
-        x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        x = app.widthInChars() / 2;
+        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
     @Deprecated
@@ -32,14 +32,14 @@ public class SelectionScreen implements Screen {
             optionSelections[i] = new redirectSelection(options[i], Screens.HOME);
         }
         optionsList = optionSelections;
-        x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        x = app.widthInChars() / 2;
+        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
     SelectionScreen(Selection[] options, String title, ScreenedApplication app) {
         optionsList = options;
-        x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        x = app.widthInChars() / 2;
+        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
 
