@@ -10,16 +10,13 @@ import java.util.Random;
 import java.util.Stack;
 
 public class SnakeScreen extends BasicScreen {
-   private int snakeDirection = 1;
-    private Stack<Point> snakePoints = new Stack<Point>(){{
-        add(new Point(2, 0));
-        add(new Point(1, 0));
-        add(new Point(0, 0));
-    }};
+   private int snakeDirection;
+   int speed = 2;
+    private Stack<Point> snakePoints;
 
     private int height = 20;
     private int width = 20;
-    private Point applePos = new Point(0, 0);
+    private Point applePos;
 
     SnakeScreen(ScreenedApplication app) {
         super(app);
@@ -29,6 +26,11 @@ public class SnakeScreen extends BasicScreen {
     @Override
     public AsciiFont getFont() {
         return AsciiFont.CP437_12x12;
+    }
+
+    @Override
+    public int getMsPerTick() {
+        return 200 / speed;
     }
 
     @Override
@@ -88,7 +90,7 @@ public class SnakeScreen extends BasicScreen {
             add(new Point(width/4, height/2));
         }};
 
-        applePos.setLocation(3 * (width/4), height/2);
+        applePos = new Point(3 * (width/4), height/2);
     }
 
     private void renderBoard(AsciiPanel terminal) {
