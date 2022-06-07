@@ -110,10 +110,11 @@ public class ScreenedApplication extends JFrame implements KeyListener
         addKeyListener(this);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
     public void run() throws InterruptedException {
+        setVisible(true);
+
         long previousTimeStamp;
         while (true) {
             previousTimeStamp = System.currentTimeMillis();

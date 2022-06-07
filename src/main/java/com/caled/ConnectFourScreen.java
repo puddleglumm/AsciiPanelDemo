@@ -68,7 +68,7 @@ public class ConnectFourScreen extends BasicScreen {
             }
             i++;
         }
-        drawConnectFourGrid(terminal, 30, 4);
+        drawConnectFourGrid(30, 4);
         terminal.repaint();
     }
 
@@ -90,7 +90,8 @@ public class ConnectFourScreen extends BasicScreen {
 
     }
 
-    private void drawConnectFourGrid(AsciiPanel terminal, int x, int y) {
+    private void drawConnectFourGrid(int x, int y) {
+        AsciiPanel terminal = application().getTerminal();
         for (int i = 0; i < board.length + 1; i++) {
             for (int j = 0; j < (3 * (board[0].length + 1)) - 2; j++) {
                 terminal.write("#", x + j, y + (i * 3));
@@ -115,31 +116,6 @@ public class ConnectFourScreen extends BasicScreen {
     }
 
     private boolean checkWin(int x, int y) {
-        /*boolean xibl = x > 2;
-        boolean yibu = y > 3;
-        boolean yibd = y < 3;
-
-        if (xibl) {
-            if (Math.abs(board[y][x - 1] + board[y][x - 2] + board[y][x - 3] + board[y][x]) == 4) { return true; }
-            else if (yibu) {
-                if (Math.abs(board[y - 1][x - 1] + board[y - 2][x - 2] + board[y - 3][x - 3] + board[y][x]) == 4) { return true; }
-            } else if (yibd) {
-                if (Math.abs(board[y + 1][x - 1] + board[y + 2][x - 2] + board[y + 3][x - 3] + board[y][x]) == 4) { return true; }
-            }
-        } else {
-            if (Math.abs(board[y][x + 1] + board[y][x + 2] + board[y][x + 3] + board[y][x]) == 4) { return true; }
-            else if (yibu) {
-                if (Math.abs(board[y - 1][x + 1] + board[y - 2][x + 2] + board[y - 3][x + 3] + board[y][x]) == 4) { return true; }
-            } else if (yibd) {
-                if (Math.abs(board[y + 1][x + 1] + board[y + 2][x + 2] + board[y + 3][x + 3] + board[y][x]) == 4) { return true; }
-            }
-        }
-        if (yibu) {
-            if (Math.abs(board[y - 1][x] + board[y - 2][x] + board[y - 3][x] + board[y][x]) == 4) { return true; }
-        } else if (yibd) {
-            if (Math.abs(board[y + 1][x] + board[y + 2][x] + board[y + 3][x] + board[y][x]) == 4) { return true; }
-        }
-        return false;*/
         int consecutive_NE = 1;
         int consecutive_SE = 1;
         int consecutive_N = 1;
