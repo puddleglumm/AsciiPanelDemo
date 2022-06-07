@@ -127,7 +127,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
                 terminal.setAsciiFont(newFont);
             }
 
-            Thread.sleep(mspt - (System.currentTimeMillis() - previousTimeStamp));
+            Thread.sleep(Math.max(0, mspt - (System.currentTimeMillis() - previousTimeStamp)));
         }
     }
 }
