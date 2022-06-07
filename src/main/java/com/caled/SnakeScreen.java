@@ -6,20 +6,24 @@ import asciiPanel.AsciiPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 public class SnakeScreen extends BasicScreen {
-   int snakeDirection = 1;
-    Stack<Point> snakePoints = new Stack<Point>(){{
-        add(new Point(4, 0));
-        add(new Point(3, 0));
+   private int snakeDirection = 1;
+    private Stack<Point> snakePoints = new Stack<Point>(){{
         add(new Point(2, 0));
         add(new Point(1, 0));
         add(new Point(0, 0));
     }};
 
+    private int height = 20;
+    private int width = 20;
+    private Point applePos = new Point(0, 0);
+
     SnakeScreen(ScreenedApplication app) {
         super(app);
+        reset();
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SnakeScreen extends BasicScreen {
             next.y += (snakeDirection / 2);
         }
 
-        boolean stillInBounds = (0 <= next.y && next.y < 24) && (0 <= next.x && next.x < 80);
+        boolean stillInBounds = (0 <= next.y && next.y < height) && (0 <= next.x && next.x < width);
         boolean collidedWithSelf = false;
         for (Point segment : snakePoints) {
             if (segment.x == next.x && segment.y == next.y) {
@@ -63,8 +67,12 @@ public class SnakeScreen extends BasicScreen {
         }
 
         if (stillInBounds && !collidedWithSelf) {
-            snakePoints.remove(snakePoints.size() - 1);
             snakePoints.insertElementAt(next, 0);
+            if (applePos.equals(next)) {
+                replaceApple();
+            } else {
+                snakePoints.remove(snakePoints.size() - 1);
+            }
             return true;
         } else {
             return false;
@@ -75,18 +83,32 @@ public class SnakeScreen extends BasicScreen {
     public void reset() {
         snakeDirection = 1;
         snakePoints = new Stack<Point>(){{
-            add(new Point(4, 0));
-            add(new Point(3, 0));
-            add(new Point(2, 0));
-            add(new Point(1, 0));
-            add(new Point(0, 0));
+            add(new Point(2 + (width/4), height/2));
+            add(new Point(1 + (width/4), height/2));
+            add(new Point(width/4, height/2));
         }};
+
+        applePos.setLocation(3 * (width/4), height/2);
     }
 
     private void renderBoard(AsciiPanel terminal) {
-        for (Point segment : snakePoints) {
-            terminal.write("#", segment.x, segment.y, Color.GREEN);
+        int offsetX = (application().widthInChars() - width) / 2;
+        int offsetY = (application().heightInChars() - height) / 2;
+
+        for (int i = 0; i < width + 2; i++) {
+            terminal.write("#", i + offsetX - 1, offsetY - 1);
+            terminal.write("#", i + offsetX - 1, offsetY + height);
         }
+        for (int i = 0; i < height; i++) {
+            terminal.write("#", offsetX - 1, i + offsetY);
+            terminal.write("#", offsetX + width, i + offsetY);
+        }
+
+        for (Point segment : snakePoints) {
+            terminal.write("#", segment.x + offsetX, segment.y + offsetY, Color.GREEN);
+        }
+
+        terminal.write("@", applePos.x + offsetX, applePos.y + offsetY, Color.RED);
     }
 
     private void processInputs(ArrayList<KeyEvent> inputs) {
@@ -112,5 +134,29 @@ public class SnakeScreen extends BasicScreen {
                 application.setScreen(Screens.PAUSE);
             }
         }
+    }
+
+    private void replaceApple() {
+        Random appleRNG = new Random();
+
+        //TODO: Don't use bad infinite rng
+        boolean inSnake = false;
+        Point newPos = new Point(appleRNG.nextInt(width), appleRNG.nextInt(height));
+        for (Point pos : snakePoints) {
+            if (pos.x == newPos.x && pos.y == newPos.y) {
+                inSnake = true;
+            }
+        }
+        while (inSnake) {
+            inSnake = false;
+            newPos = new Point(appleRNG.nextInt(width), appleRNG.nextInt(height));
+            for (Point pos : snakePoints) {
+                if (pos.x == newPos.x && pos.y == newPos.y) {
+                    inSnake = true;
+                }
+            }
+        }
+
+        applePos = newPos;
     }
 }
