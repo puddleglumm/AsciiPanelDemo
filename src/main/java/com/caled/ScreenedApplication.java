@@ -28,15 +28,12 @@ public class ScreenedApplication extends JFrame implements KeyListener
     public ArrayList<Screen> screens = new ArrayList<>();
 
     public boolean typing = false;
+    public boolean updateFont = false;
 
 
     public ScreenedApplication() throws InterruptedException {
         super();
-        AsciiFont font = new AsciiFont("msFlag_9x16.png", 9, 16);
-        terminal = new AsciiPanel(96, 48, font);
-        setSize(windowSize);
-        add(terminal);
-        addKeyListener(this);
+        init();
     }
 
     public void keyPressed(KeyEvent e) {
@@ -75,10 +72,8 @@ public class ScreenedApplication extends JFrame implements KeyListener
             lastScreen = currentScreen;
             currentScreen = screen;
         }
-        // TODO: Make resizing functional
-        AsciiFont newFont = getCurrentScreen().getFont();
-        terminal.setAsciiFont(newFont);
         mspt = getCurrentScreen().getMsPerTick();
+        updateFont = true;
     }
 
     public void resetScreen(int screen) {
@@ -104,22 +99,33 @@ public class ScreenedApplication extends JFrame implements KeyListener
     }
 
     private void init() {
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+        terminal = new AsciiPanel(96, 48, AsciiFont.CP437_9x16);
 
         Screens.initializeScreens(this);
         setScreen(0);
+        updateFont = false;
+
+        setSize(windowSize);
+        add(terminal);
+        addKeyListener(this);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     public void run() throws InterruptedException {
-        init();
-
         long previousTimeStamp;
         while (true) {
             previousTimeStamp = System.currentTimeMillis();
             getCurrentScreen().tick(keyPressedSinceLastTick);
             keyPressedSinceLastTick.clear();
+
+            if (updateFont) {
+                updateFont = false;
+                AsciiFont newFont = getCurrentScreen().getFont();
+                terminal.setAsciiFont(newFont);
+            }
+
             Thread.sleep(mspt - (System.currentTimeMillis() - previousTimeStamp));
         }
     }
