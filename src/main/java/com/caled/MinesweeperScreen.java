@@ -11,8 +11,7 @@ import com.github.puddleglumm.minesweeper.*;
 public class MinesweeperScreen implements Screen {
 
     Board board = new Board(20, 20, 21);
-    int cursorX = 0;
-    int cursorY = 0;
+    Point cursor = new Point(0, 0);
     private final String flagChar = "\u00E2";
     private final String unrevealedTileChar = "#";
     private final String emptyTileChar = ".";
@@ -53,8 +52,8 @@ public class MinesweeperScreen implements Screen {
     @Override
     public void reset() {
         board = new Board(20, 20, 21);
-        cursorX = 0;
-        cursorY = 0;
+        cursor.x = 0;
+        cursor.y = 0;
     }
 
     private void renderBoard(ScreenedApplication app) {
@@ -66,7 +65,7 @@ public class MinesweeperScreen implements Screen {
 
                 String display = getDisplayCharForTileAt(i_x, i_y);
                 Color bgColor = app.getTerminal().getDefaultBackgroundColor();
-                if (i_x == cursorX && i_y == cursorY) { bgColor = cursorBgColor; }
+                if (i_x == cursor.x && i_y == cursor.y) { bgColor = cursorBgColor; }
 
                 app.getTerminal().write(display, (i_x * 2) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
             }
@@ -93,14 +92,14 @@ public class MinesweeperScreen implements Screen {
             } else if (keyCode == KeyEvent.VK_A) {
                 moveCursorLeft();
             } else if (keyCode == KeyEvent.VK_F) {
-                if (!board.isRevealedAt(cursorX, cursorY)) {
-                    board.toggleFlagAt(cursorX, cursorY);
+                if (!board.isRevealedAt(cursor.x, cursor.y)) {
+                    board.toggleFlagAt(cursor.x, cursor.y);
                 }
             } else if (keyCode == KeyEvent.VK_ENTER) {
-                if (board.hasMineAt(cursorX, cursorY)) {
+                if (board.hasMineAt(cursor.x, cursor.y)) {
                     Screens.goToGameFinishScreen(application, "You lost");
-                } else if (!board.isRevealedAt(cursorX, cursorY) && !board.isFlaggedAt(cursorX, cursorY)) {
-                    board.startRevealAt(cursorX, cursorY);
+                } else if (!board.isRevealedAt(cursor.x, cursor.y) && !board.isFlaggedAt(cursor.x, cursor.y)) {
+                    board.startRevealAt(cursor.x, cursor.y);
                 }
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 application.setScreen(Screens.PAUSE);
@@ -109,26 +108,26 @@ public class MinesweeperScreen implements Screen {
     }
 
     private void moveCursorLeft() {
-        if (cursorX > 0) {
-            cursorX -= 1;
+        if (cursor.x > 0) {
+            cursor.x -= 1;
         }
     }
 
     private void moveCursorRight() {
-        if (cursorX < board.width() - 1) {
-            cursorX += 1;
+        if (cursor.x < board.width() - 1) {
+            cursor.x += 1;
         }
     }
 
     private void moveCursorDown() {
-        if (cursorY < board.height() - 1) {
-            cursorY += 1;
+        if (cursor.y < board.height() - 1) {
+            cursor.y += 1;
         }
     }
 
     private void moveCursorUp() {
-        if (cursorY > 0) {
-            cursorY -= 1;
+        if (cursor.y > 0) {
+            cursor.y -= 1;
         }
     }
 }
