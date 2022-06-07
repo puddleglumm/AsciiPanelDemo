@@ -109,30 +109,26 @@ public class MinesweeperScreen implements Screen {
     }
 
     private void moveCursorLeft() {
-        cursorX -= 1;
-        if (cursorX < 0) {
-            cursorX = board.width() - 1;
+        if (cursorX > 0) {
+            cursorX -= 1;
         }
     }
 
     private void moveCursorRight() {
-        cursorX += 1;
-        if (cursorX >= board.width()) {
-            cursorX = 0;
+        if (cursorX < board.width() - 1) {
+            cursorX += 1;
         }
     }
 
     private void moveCursorDown() {
-        cursorY += 1;
-        if (cursorY >= board.height()) {
-            cursorY = 0;
+        if (cursorY < board.height() - 1) {
+            cursorY += 1;
         }
     }
 
     private void moveCursorUp() {
-        cursorY -= 1;
-        if (cursorY < 0) {
-            cursorY = board.height() - 1;
+        if (cursorY > 0) {
+            cursorY -= 1;
         }
     }
 }
