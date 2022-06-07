@@ -57,11 +57,11 @@ public class MinesweeperScreen implements Screen {
     }
 
     private void renderBoard(ScreenedApplication app) {
+        int offsetX = app.widthInChars()/2 - board.width();
+        int offsetY = (app.heightInChars() - board.height())/2;
+
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {
-
-                int offsetX = app.widthInChars()/2 - board.width();
-                int offsetY = (app.heightInChars() - board.height())/2;
 
                 String display = getDisplayCharForTileAt(i_x, i_y);
                 Color bgColor = app.getTerminal().getDefaultBackgroundColor();
