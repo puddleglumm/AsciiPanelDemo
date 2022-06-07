@@ -1,8 +1,8 @@
 package com.caled;
 
 public class textPickerSelection implements Selection {
-    String title;
-    String[] contents;
+    private String title;
+    private String[] contents;
     int current;
 
     textPickerSelection(String title, String[] options, int start) {
@@ -37,5 +37,13 @@ public class textPickerSelection implements Selection {
 
     public String display() {
         return (title + ": " + contents[current]);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCurrent() {
+        return contents[current];
     }
 }

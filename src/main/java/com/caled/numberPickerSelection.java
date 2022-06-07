@@ -1,10 +1,10 @@
 package com.caled;
 
 public class numberPickerSelection implements Selection {
-    String title;
-    int min;
-    int max;
-    int current;
+    private String title;
+    private int min;
+    private int max;
+    private int current;
 
     numberPickerSelection(String title, int min, int max, int start) {
         this.title = title;
@@ -40,5 +40,13 @@ public class numberPickerSelection implements Selection {
 
     public String display() {
         return title + ": " + String.valueOf(current);
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

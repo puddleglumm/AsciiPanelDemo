@@ -5,6 +5,9 @@ public class TextBoxSelection implements Selection {
     public String text = "";
     private String hintText = "type here";
 
+    TextBoxSelection(String title) {
+        this.title = title;
+    }
     TextBoxSelection(String title, String hintText) {
         this.title = title;
         this.hintText = hintText;
@@ -25,5 +28,13 @@ public class TextBoxSelection implements Selection {
         if (text.length() > 0) {
             return (title + ": " + text);
         } else { return (title + ": " + hintText); }
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
     }
 }

@@ -12,9 +12,9 @@ public class SelectionScreen extends BasicScreen {
     private int spaceBetweenOptions = 1;
     private Selection[] optionsList;
     private String displayTitle;
-    int currentSelection = 0;
-    int x;
-    int y;
+    private int currentSelection = 0;
+    private int x;
+    private int y;
 
     SelectionScreen(ScreenedApplication app, Selection[] options, String title, int spacing) {
         super(app);
@@ -91,25 +91,6 @@ public class SelectionScreen extends BasicScreen {
     }
 
     private void onSelection(int selectionIndex) {
-        /*String selectionDisplay = optionsList[selectionIndex].display();
-        if (Objects.equals(selectionDisplay, "[   quit   ]")) {
-            application.exit();
-        } else if (Objects.equals(selectionDisplay, "[   play   ]")) {
-            application.resetScreen(1);
-            application.setScreen(1);
-        } else if (Objects.equals(selectionDisplay, "[ return to title ]")) {
-            application.setScreen(0);
-        } else if (Objects.equals(selectionDisplay, "[   play again    ]")) {
-            application.resetScreen(1);
-            application.setScreen(1);
-        } else if (Objects.equals(selectionDisplay, "[    continue     ]")) {
-            application.setScreen(1);
-        } else if (Objects.equals(selectionDisplay, "[     restart     ]")) {
-            application.resetScreen(1);
-            application.setScreen(1);
-        } else {
-           optionsList[selectionIndex].onInteract(application);
-        }*/
         optionsList[selectionIndex].onInteract(application());
     }
 
@@ -119,5 +100,9 @@ public class SelectionScreen extends BasicScreen {
 
     public void reset() {
         currentSelection = 0;
+    }
+
+    public Selection[] getSelections() {
+        return optionsList;
     }
 }
