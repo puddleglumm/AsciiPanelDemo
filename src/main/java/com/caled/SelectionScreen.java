@@ -5,9 +5,8 @@ import asciiPanel.AsciiPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class SelectionScreen implements Screen {
+public class SelectionScreen extends BasicScreen {
     private final String[] keyCodeToChar = new String[]{"a","b","c","d","e","f","g","h","i","j", "k","l","m",
             "n","o","p","q", "r","s","t","u","v","w","x","y","z"};
     private int spaceBetweenOptions = 1;
@@ -17,33 +16,25 @@ public class SelectionScreen implements Screen {
     int x;
     int y;
 
-    SelectionScreen(Selection[] options, String title, ScreenedApplication app, int spacing) {
+    SelectionScreen(ScreenedApplication app, Selection[] options, String title, int spacing) {
+        super(app);
         spaceBetweenOptions = spacing;
-        optionsList = options;
-        x = app.widthInChars() / 2;
-        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
-        displayTitle = title;
-    }
-    @Deprecated
-    SelectionScreen(String[] options, String title, ScreenedApplication app, int spacing) {
-        spaceBetweenOptions = spacing;
-        Selection[] optionSelections = new Selection[options.length];
-        for (int i = 0; i < options.length; i++) {
-            optionSelections[i] = new redirectSelection(options[i], Screens.HOME);
-        }
-        optionsList = optionSelections;
-        x = app.widthInChars() / 2;
-        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
-        displayTitle = title;
-    }
-    SelectionScreen(Selection[] options, String title, ScreenedApplication app) {
         optionsList = options;
         x = app.widthInChars() / 2;
         y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
 
-    public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    SelectionScreen(ScreenedApplication app, Selection[] options, String title) {
+        super(app);
+        optionsList = options;
+        x = app.widthInChars() / 2;
+        y = (app.heightInChars() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        displayTitle = title;
+    }
+
+    public void tick(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
         for (KeyEvent input : inputs) {
@@ -75,7 +66,7 @@ public class SelectionScreen implements Screen {
                         currentSelection = 0;
                     }
                 } else if (input.getKeyCode() == KeyEvent.VK_ENTER) {
-                    onSelection(currentSelection, application);
+                    onSelection(currentSelection);
                 } else if (input.getKeyCode() == KeyEvent.VK_A) {
                     optionsList[currentSelection].onLeft();
                 } else if (input.getKeyCode() == KeyEvent.VK_D) {
@@ -99,7 +90,7 @@ public class SelectionScreen implements Screen {
         terminal.repaint();
     }
 
-    private void onSelection(int selectionIndex, ScreenedApplication application) {
+    private void onSelection(int selectionIndex) {
         /*String selectionDisplay = optionsList[selectionIndex].display();
         if (Objects.equals(selectionDisplay, "[   quit   ]")) {
             application.exit();
@@ -119,7 +110,7 @@ public class SelectionScreen implements Screen {
         } else {
            optionsList[selectionIndex].onInteract(application);
         }*/
-        optionsList[selectionIndex].onInteract(application);
+        optionsList[selectionIndex].onInteract(application());
     }
 
     public void setDisplayTitle(String title) {

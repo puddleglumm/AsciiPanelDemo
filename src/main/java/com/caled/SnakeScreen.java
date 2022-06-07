@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class SnakeScreen implements Screen {
+public class SnakeScreen extends BasicScreen {
    int snakeDirection = 1;
     Stack<Point> snakePoints = new Stack<Point>(){{
         add(new Point(4, 0));
@@ -18,17 +18,22 @@ public class SnakeScreen implements Screen {
         add(new Point(0, 0));
     }};
 
+    SnakeScreen(ScreenedApplication app) {
+        super(app);
+    }
+
     @Override
     public AsciiFont getFont() {
         return AsciiFont.CP437_12x12;
     }
 
     @Override
-    public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    public void tick(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
 
-        processInputs(application, inputs);
+        processInputs(inputs);
 
         if (!updateSnakePosition()) {
             String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size());
@@ -84,7 +89,8 @@ public class SnakeScreen implements Screen {
         }
     }
 
-    private void processInputs(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    private void processInputs(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
 
         boolean changedDir = false;
         for (KeyEvent input : inputs) {

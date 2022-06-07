@@ -118,7 +118,7 @@ public class ScreenedApplication extends JFrame implements KeyListener
         long previousTimeStamp;
         while (true) {
             previousTimeStamp = System.currentTimeMillis();
-            getCurrentScreen().tick(this, keyPressedSinceLastTick);
+            getCurrentScreen().tick(keyPressedSinceLastTick);
             keyPressedSinceLastTick.clear();
             Thread.sleep(mspt - (System.currentTimeMillis() - previousTimeStamp));
         }

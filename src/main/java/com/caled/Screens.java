@@ -40,13 +40,13 @@ public class Screens {
                 new redirectSelection("return to title", Screens.HOME)
         };
 
-        app.screens.add(new SelectionScreen(homeScreen, "Caleb's Game Collection", app, 2));
-        app.screens.add(new ConnectFourScreen());
-        app.screens.add(new SelectionScreen(gameFinishScreen, "placeholder", app, 2));
-        app.screens.add(new SelectionScreen(pauseScreen, "Paused", app, 2));
-        app.screens.add(new DebugScreen(debugScreen, "debug", app, 2));
-        app.screens.add(new MinesweeperScreen());
-        app.screens.add(new SnakeScreen());
+        app.screens.add(new SelectionScreen(app, homeScreen, "Caleb's Game Collection", 2));
+        app.screens.add(new ConnectFourScreen(app));
+        app.screens.add(new SelectionScreen(app, gameFinishScreen, "placeholder", 2));
+        app.screens.add(new SelectionScreen(app, pauseScreen, "Paused", 2));
+        app.screens.add(new DebugScreen(app, debugScreen, "debug", 2));
+        app.screens.add(new MinesweeperScreen(app));
+        app.screens.add(new SnakeScreen(app));
     }
 
     public static void goToGameFinishScreen(ScreenedApplication app, String title) {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import asciiPanel.AsciiPanel;
 import com.github.puddleglumm.minesweeper.*;
 
-public class MinesweeperScreen implements Screen {
+public class MinesweeperScreen extends BasicScreen {
 
     Board board = new Board(20, 20, 21);
     Point cursor = new Point(0, 0);
@@ -30,13 +30,17 @@ public class MinesweeperScreen implements Screen {
         put(flagChar, Color.ORANGE);
     }};
 
+    MinesweeperScreen(ScreenedApplication app) {
+        super(app);
+    }
     @Override
-    public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    public void tick(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
 
         if (!board.revealInProgress()) {
-            processInputs(application, inputs);
+            processInputs(inputs);
         } else {
             board.continueRevealing();
         }
@@ -79,7 +83,9 @@ public class MinesweeperScreen implements Screen {
         return String.valueOf(board.adjacentMinesAt(x, y));
     }
 
-    private void processInputs(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    private void processInputs(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
+
         for (KeyEvent input : inputs) {
             int keyCode = input.getKeyCode();
 

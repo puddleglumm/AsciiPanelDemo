@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class DebugScreen implements Screen {
+public class DebugScreen extends BasicScreen {
     private int spaceBetweenOptions = 1;
     private Selection[] optionsList;
     private String displayTitle;
@@ -17,22 +17,25 @@ public class DebugScreen implements Screen {
                                                   "n","o","p","q", "r","s","t","u","v","w","x","y","z"};
     String keyStrokes = "";
 
-    DebugScreen(Selection[] options, String title, ScreenedApplication app, int spacing) {
+    DebugScreen(ScreenedApplication app, Selection[] options, String title, int spacing) {
+        super(app);
         spaceBetweenOptions = spacing;
         optionsList = options;
-        x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        x = application().getTerminal().getWidthInCharacters() / 2;
+        y = (application().getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
 
-    DebugScreen(Selection[] options, String title, ScreenedApplication app) {
+    DebugScreen(ScreenedApplication app, Selection[] options, String title) {
+        super(app);
         optionsList = options;
-        x = app.getTerminal().getWidthInCharacters() / 2;
-        y = (app.getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
+        x = application().getTerminal().getWidthInCharacters() / 2;
+        y = (application().getTerminal().getHeightInCharacters() - ((optionsList.length + 2) * spaceBetweenOptions)) / 2;
         displayTitle = title;
     }
 
-    public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    public void tick(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
         for (KeyEvent input : inputs) {
@@ -77,7 +80,7 @@ public class DebugScreen implements Screen {
                         currentSelection = 0;
                     }
                 } else if (input.getKeyCode() == KeyEvent.VK_ENTER) {
-                    onSelection(currentSelection, application);
+                    onSelection(currentSelection);
                 } else if (input.getKeyCode() == KeyEvent.VK_A) {
                     optionsList[currentSelection].onLeft();
                 } else if (input.getKeyCode() == KeyEvent.VK_D) {
@@ -108,8 +111,8 @@ public class DebugScreen implements Screen {
         terminal.repaint();
     }
 
-    private void onSelection(int selectionIndex, ScreenedApplication application) {
-        optionsList[selectionIndex].onInteract(application);
+    private void onSelection(int selectionIndex) {
+        optionsList[selectionIndex].onInteract(application());
     }
 
     public void setDisplayTitle(String title) {

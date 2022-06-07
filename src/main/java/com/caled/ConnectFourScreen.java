@@ -7,19 +7,21 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ConnectFourScreen implements Screen {
+public class ConnectFourScreen extends BasicScreen {
     int[][] board = new int[6][7];
     int currentSelection = 0;
     int turn = 1;
     int animationProgress = -1;
 
 
-    ConnectFourScreen() {
+    ConnectFourScreen(ScreenedApplication app) {
+        super(app);
         for (int[] ints : board) {
             Arrays.fill(ints, 0);
         }
     }
-    public void tick(ScreenedApplication application, ArrayList<KeyEvent> inputs) {
+    public void tick(ArrayList<KeyEvent> inputs) {
+        ScreenedApplication application = application();
         AsciiPanel terminal = application.getTerminal();
         terminal.clear();
         if (animationProgress < 0) {
@@ -40,7 +42,7 @@ public class ConnectFourScreen implements Screen {
                     application.setScreen(Screens.PAUSE);
                 }
             }
-            writePlayerPiece(terminal, 30 + (3 * (currentSelection + 1)) - 2, 2, turn);
+            writePlayerPiece(30 + (3 * (currentSelection + 1)) - 2, 2, turn);
         } else {
             if (animationProgress == board.length - 1 || board[animationProgress + 1][currentSelection] != 0) {
                 board[animationProgress][currentSelection] = turn;
@@ -53,7 +55,7 @@ public class ConnectFourScreen implements Screen {
                 } else { animationProgress = -1; turn *= -1; }
 
             } else {
-                writePlayerPiece(terminal, 30 + (3 * (currentSelection + 1)) - 2, 4 + (3 * (animationProgress + 1)) - 2, turn);
+                writePlayerPiece(30 + (3 * (currentSelection + 1)) - 2, 4 + (3 * (animationProgress + 1)) - 2, turn);
                 if (animationProgress < board.length - 1) { animationProgress++; }
             }
         }
@@ -61,7 +63,7 @@ public class ConnectFourScreen implements Screen {
         for (int[] row : board) {
             int j = 0;
             for (int piece : row) {
-                writePlayerPiece(terminal, 30 + (3 * (j + 1)) - 2, 4 + (3 * (i + 1)) - 2, piece);
+                writePlayerPiece(30 + (3 * (j + 1)) - 2, 4 + (3 * (i + 1)) - 2, piece);
                 j++;
             }
             i++;
@@ -70,7 +72,9 @@ public class ConnectFourScreen implements Screen {
         terminal.repaint();
     }
 
-    private void writePlayerPiece(AsciiPanel terminal, int x, int y, int player) {
+    private void writePlayerPiece(int x, int y, int player) {
+        AsciiPanel terminal = application().getTerminal();
+
         if (player == -1)  {
             terminal.write("@", x, y, Color.yellow);
             terminal.write("@", x + 1, y, Color.yellow);
