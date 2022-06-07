@@ -96,15 +96,20 @@ public class MinesweeperScreen implements Screen {
                     board.toggleFlagAt(cursor.x, cursor.y);
                 }
             } else if (keyCode == KeyEvent.VK_ENTER) {
-                if (board.hasMineAt(cursor.x, cursor.y)) {
+                if (cannotRevealTileAtCursor()) {
+                    return;
+                } else if (board.hasMineAt(cursor.x, cursor.y)) {
                     Screens.goToGameFinishScreen(application, "You lost");
-                } else if (!board.isRevealedAt(cursor.x, cursor.y) && !board.isFlaggedAt(cursor.x, cursor.y)) {
-                    board.startRevealAt(cursor.x, cursor.y);
                 }
+                board.startRevealAt(cursor.x, cursor.y);
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 application.setScreen(Screens.PAUSE);
             }
         }
+    }
+
+    private boolean cannotRevealTileAtCursor() {
+        return board.isFlaggedAt(cursor.x, cursor.y) || board.isRevealedAt(cursor.x, cursor.y);
     }
 
     private void moveCursorLeft() {
