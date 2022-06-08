@@ -5,15 +5,13 @@ import asciiPanel.AsciiPanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
+
 
 public class SnakeScreen extends BasicScreen {
-   private int snakeDirection;
-   int speed = 2;
-    private Stack<Point> snakePoints;
-
+    private int snakeDirection;
+    int speed = 2;
+    private Deque<Point> snakePoints;
     private int height = 20;
     private int width = 20;
     private Point applePos;
@@ -45,14 +43,14 @@ public class SnakeScreen extends BasicScreen {
             String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size());
             Screens.goToGameFinishScreen(application, finishScreenTitle);
         }
-        renderBoard(terminal);
+        renderBoard();
 
         terminal.repaint();
     }
 
     private boolean updateSnakePosition() {
 
-        Point next = new Point(snakePoints.get(0));
+        Point next = new Point(snakePoints.getLast());
         if (Math.abs(snakeDirection) == 1) {
             next.x += snakeDirection;
         } else {
@@ -69,11 +67,11 @@ public class SnakeScreen extends BasicScreen {
         }
 
         if (stillInBounds && !collidedWithSelf) {
-            snakePoints.insertElementAt(next, 0);
+            snakePoints.offer(next);
             if (applePos.equals(next)) {
                 replaceApple();
             } else {
-                snakePoints.remove(snakePoints.size() - 1);
+                snakePoints.remove();
             }
             return true;
         } else {
@@ -84,16 +82,18 @@ public class SnakeScreen extends BasicScreen {
     @Override
     public void reset() {
         snakeDirection = 1;
-        snakePoints = new Stack<Point>(){{
-            add(new Point(2 + (width/4), height/2));
-            add(new Point(1 + (width/4), height/2));
+        snakePoints = new ArrayDeque<Point>(){{
             add(new Point(width/4, height/2));
+            add(new Point(1 + (width/4), height/2));
+            add(new Point(2 + (width/4), height/2));
         }};
 
         applePos = new Point(3 * (width/4), height/2);
     }
 
-    private void renderBoard(AsciiPanel terminal) {
+    private void renderBoard() {
+        AsciiPanel terminal = application().getTerminal();
+
         int offsetX = (application().widthInChars() - width) / 2;
         int offsetY = (application().heightInChars() - height) / 2;
 
