@@ -2,6 +2,7 @@ package com.caled;
 
 import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
+import com.sun.media.jfxmedia.logging.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -127,7 +128,12 @@ public class ScreenedApplication extends JFrame implements KeyListener
                 terminal.setAsciiFont(newFont);
             }
 
-            Thread.sleep(Math.max(0, mspt - (System.currentTimeMillis() - previousTimeStamp)));
+            long t = System.currentTimeMillis() - previousTimeStamp;
+            if (t > mspt) {
+                System.out.printf("tick took: %s ms, expected max is: %s%n", t, mspt);
+            } else {
+                Thread.sleep(mspt - t);
+            }
         }
     }
 }
