@@ -42,7 +42,7 @@ public class SnakeScreen extends BasicScreen {
         processInputs(inputs);
 
         if (!updateSnakePosition()) {
-            String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size());
+            String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size() - 3);
             Screens.goToGameFinishScreen(application, finishScreenTitle);
         }
         renderBoard();
@@ -105,6 +105,8 @@ public class SnakeScreen extends BasicScreen {
 
         int offsetX = (application().widthInChars() - width) / 2;
         int offsetY = (application().heightInChars() - height) / 2;
+
+        terminal.write(String.format("Score: %s", snakePoints.size() - 3), offsetX + (width - 7)/2, offsetY - 3, Color.YELLOW);
 
         for (int i = 0; i < width + 2; i++) {
             terminal.write("#", i + offsetX - 1, offsetY - 1);
