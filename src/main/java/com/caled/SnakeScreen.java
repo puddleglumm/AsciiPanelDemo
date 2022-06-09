@@ -15,6 +15,8 @@ public class SnakeScreen extends BasicScreen {
     private int height = 20;
     private int width = 20;
     private Point applePos;
+    private HashSet<Point> allPoints;
+    private Random rng = new Random();
 
     SnakeScreen(ScreenedApplication app) {
         super(app);
@@ -89,6 +91,13 @@ public class SnakeScreen extends BasicScreen {
         }};
 
         applePos = new Point(3 * (width/4), height/2);
+
+        allPoints = new HashSet<>(width * height);
+        for (int i_x = 0; i_x < width; i_x++) {
+            for (int i_y = 0; i_y < height; i_y++) {
+                allPoints.add(new Point(i_x, i_y));
+            }
+        }
     }
 
     private void renderBoard() {
@@ -139,26 +148,17 @@ public class SnakeScreen extends BasicScreen {
     }
 
     private void replaceApple() {
-        Random appleRNG = new Random();
+        allPoints.removeAll(snakePoints);
 
-        //TODO: Don't use bad infinite rng
-        boolean inSnake = false;
-        Point newPos = new Point(appleRNG.nextInt(width), appleRNG.nextInt(height));
-        for (Point pos : snakePoints) {
-            if (pos.x == newPos.x && pos.y == newPos.y) {
-                inSnake = true;
-            }
-        }
-        while (inSnake) {
-            inSnake = false;
-            newPos = new Point(appleRNG.nextInt(width), appleRNG.nextInt(height));
-            for (Point pos : snakePoints) {
-                if (pos.x == newPos.x && pos.y == newPos.y) {
-                    inSnake = true;
-                }
+        int i = rng.nextInt(allPoints.size());
+        for (Point p : allPoints) {
+            i--;
+            if (i == 0) {
+                applePos.setLocation(p);
+                break;
             }
         }
 
-        applePos = newPos;
+        allPoints.addAll(snakePoints);
     }
 }
