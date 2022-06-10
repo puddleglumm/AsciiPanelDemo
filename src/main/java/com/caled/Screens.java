@@ -17,7 +17,7 @@ public class Screens {
                 new redirectSelection("play connect 4", Screens.CONNECT_4, Screens.CONNECT_4),
                 new redirectSelection("play minesweeper", Screens.MINESWEEPER, Screens.MINESWEEPER),
                 new redirectSelection("play snake", Screens.SNAKE, Screens.SNAKE),
-                new textPickerSelection("game", new String[]{"connect 4", "minesweeper", "snake"}),
+                new ListPickerSelection("game", new String[]{"connect 4", "minesweeper", "snake"}),
                 new redirectSelection("debug", Screens.DEBUG),
                 new redirectSelection("quit", Screens.KILL)
         };
@@ -28,9 +28,10 @@ public class Screens {
         };
 
         Selection[] debugScreen = new Selection[]{
-                new textPickerSelection("string", new String[]{"opt. 1", "opt. 2", "opt. 3"}),
-                new numberPickerSelection("numbers", 0, 10),
+                new ListPickerSelection("string", new String[]{"opt. 1", "opt. 2", "opt. 3"}),
+                new ListPickerSelection("range", ListPickerSelection.stringArrayFromIntRange(0, 20)),
                 new TextBoxSelection("input", "put stuff here"),
+                new ListPickerSelection("tempMines", ListPickerSelection.stringArrayFromIntRange(0, 20), MinesweeperScreen.MINECOUNT_PROPERTY_NAME),
                 new redirectSelection("return to title", Screens.HOME)
         };
 

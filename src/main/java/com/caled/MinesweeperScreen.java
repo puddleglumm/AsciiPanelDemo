@@ -10,6 +10,9 @@ import com.github.puddleglumm.minesweeper.*;
 
 public class MinesweeperScreen extends BasicScreen {
 
+    public final static String BOARD_HEIGHT_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".boardheight";
+    public final static String BOARD_WIDTH_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".boardwidth";
+    public final static String MINECOUNT_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".minecount";
     Board board = new Board(20, 20, 21);
     Point cursor = new Point(0, 0);
     private final String flagChar = "\u00E2";
@@ -55,7 +58,11 @@ public class MinesweeperScreen extends BasicScreen {
 
     @Override
     public void reset() {
-        board = new Board(20, 20, 21);
+        int boardHeight = Integer.parseInt(System.getProperty(BOARD_HEIGHT_PROPERTY_NAME, "20"));
+        int boardWidth = Integer.parseInt(System.getProperty(BOARD_WIDTH_PROPERTY_NAME, "20"));
+        int mineCount = Integer.parseInt(System.getProperty(MINECOUNT_PROPERTY_NAME, "21"));
+        if (mineCount >= boardWidth * boardHeight) mineCount = boardWidth * boardHeight - 1;
+        board = new Board(boardHeight, boardWidth, mineCount);
         cursor.x = 0;
         cursor.y = 0;
     }
@@ -63,7 +70,9 @@ public class MinesweeperScreen extends BasicScreen {
     private void renderBoard(ScreenedApplication app) {
         int offsetX = app.widthInChars()/2 - board.width();
         int offsetY = (app.heightInChars() - board.height())/2;
-        app.getTerminal().write(String.format("Mines: %s    Flags: %s", board.mineCount(), board.flagCount()), (board.width() - 11) + offsetX, offsetY - 3, Color.YELLOW);
+
+        String scoreDisplay = String.format("Mines: %s    Flags: %s", board.mineCount(), board.flagCount());
+        app.getTerminal().write(scoreDisplay, (board.width() - 11) + offsetX, offsetY - 3, Color.YELLOW);
 
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {

@@ -136,14 +136,19 @@ public class SnakeScreen extends BasicScreen {
                 continue;
             }
 
-            if (keyCode == KeyEvent.VK_W) {
-                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Up);
-            } else if (keyCode == KeyEvent.VK_S) {
-                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Down);
-            } else if (keyCode == KeyEvent.VK_D) {
-                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Right);
-            } else if (keyCode == KeyEvent.VK_A) {
-                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Left);
+            switch (keyCode) {
+                case KeyEvent.VK_W:
+                    changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Up);
+                    break;
+                case KeyEvent.VK_S:
+                    changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Down);
+                    break;
+                case KeyEvent.VK_D:
+                    changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Right);
+                    break;
+                case KeyEvent.VK_A:
+                    changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Left);
+                    break;
             }
         }
     }
