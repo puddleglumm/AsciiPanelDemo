@@ -130,22 +130,30 @@ public class SnakeScreen extends BasicScreen {
         for (KeyEvent input : inputs) {
             int keyCode = input.getKeyCode();
 
-            if (keyCode == KeyEvent.VK_W && !changedDir) {
-                changedDir = true;
-                snakeDirection = snakeDirection.turnUp();
-            } else if (keyCode == KeyEvent.VK_S && !changedDir) {
-                changedDir = true;
-                snakeDirection = snakeDirection.turnDown();
-            } else if (keyCode == KeyEvent.VK_D && !changedDir) {
-                changedDir = true;
-                snakeDirection = snakeDirection.turnRight();
-            } else if (keyCode == KeyEvent.VK_A && !changedDir) {
-                changedDir = true;
-                snakeDirection = snakeDirection.turnLeft();
-            } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 application.setScreen(Screens.PAUSE);
+            } else if (changedDir) {
+                continue;
+            }
+
+            if (keyCode == KeyEvent.VK_W) {
+                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Up);
+            } else if (keyCode == KeyEvent.VK_S) {
+                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Down);
+            } else if (keyCode == KeyEvent.VK_D) {
+                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Right);
+            } else if (keyCode == KeyEvent.VK_A) {
+                changedDir = tryChangingSnakeDirectionTo(SnakeDirection.Left);
             }
         }
+    }
+
+    private boolean tryChangingSnakeDirectionTo(SnakeDirection direction) {
+        if (snakeDirection.canTurn(direction)) {
+            snakeDirection = direction;
+            return true;
+        }
+        return false;
     }
 
     private void replaceApple() {
@@ -165,38 +173,23 @@ public class SnakeScreen extends BasicScreen {
 
     public enum SnakeDirection {
         Up {
-            public SnakeDirection turnLeft()  { return Left; }
-            public SnakeDirection turnRight() { return Right; }
-            public SnakeDirection turnUp()    { return Up; }
-            public SnakeDirection turnDown()  { return Up; }
+            public boolean canTurn(SnakeDirection direction)  { return direction == Left || direction == Right; }
             public Point delta() { return new Point(0, -1); }
         },
         Down {
-            public SnakeDirection turnLeft()  { return Left; }
-            public SnakeDirection turnRight() { return Right; }
-            public SnakeDirection turnUp()    { return Down; }
-            public SnakeDirection turnDown()  { return Down; }
+            public boolean canTurn(SnakeDirection direction)  { return direction == Left || direction == Right; }
             public Point delta() { return new Point(0, 1); }
         },
         Left {
-            public SnakeDirection turnLeft()  { return Left; }
-            public SnakeDirection turnRight() { return Left; }
-            public SnakeDirection turnUp()    { return Up; }
-            public SnakeDirection turnDown()  { return Down; }
+            public boolean canTurn(SnakeDirection direction)  { return direction == Up || direction == Down; }
             public Point delta() { return new Point(-1, 0); }
         },
         Right {
-            public SnakeDirection turnLeft()  { return Right; }
-            public SnakeDirection turnRight() { return Right; }
-            public SnakeDirection turnUp()    { return Up; }
-            public SnakeDirection turnDown()  { return Down; }
+            public boolean canTurn(SnakeDirection direction)  { return direction == Up || direction == Down; }
             public Point delta() { return new Point(1, 0); }
         };
 
-        public abstract SnakeDirection turnLeft();
-        public abstract SnakeDirection turnRight();
-        public abstract SnakeDirection turnUp();
-        public abstract SnakeDirection turnDown();
+        public abstract boolean canTurn(SnakeDirection direction);
         public abstract Point delta();
     }
 }
