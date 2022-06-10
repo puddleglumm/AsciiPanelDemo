@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class SnakeScreen extends BasicScreen {
-    private int snakeDirection;
+    private SnakeDirection snakeDirection;
     int speed = 2;
     private Deque<Point> snakePoints;
     private final int height = 20;
@@ -54,11 +54,7 @@ public class SnakeScreen extends BasicScreen {
     private boolean updateSnakePosition() {
 
         Point next = new Point(snakePoints.getLast());
-        if (Math.abs(snakeDirection) == 1) {
-            next.x += snakeDirection;
-        } else {
-            next.y += (snakeDirection / 2);
-        }
+        next.translate(snakeDirection.delta().x, snakeDirection.delta().y);
 
         boolean stillInBounds = (0 <= next.y && next.y < height) && (0 <= next.x && next.x < width);
         boolean collidedWithSelf = false;
@@ -84,7 +80,7 @@ public class SnakeScreen extends BasicScreen {
 
     @Override
     public void reset() {
-        snakeDirection = 1;
+        snakeDirection = SnakeDirection.Right;
         Point start = new Point(width / 4, height / 2);
 
         snakePoints = new ArrayDeque<>(Arrays.asList(
@@ -134,18 +130,18 @@ public class SnakeScreen extends BasicScreen {
         for (KeyEvent input : inputs) {
             int keyCode = input.getKeyCode();
 
-            if (keyCode == KeyEvent.VK_W && !changedDir && Math.abs(snakeDirection) == 1) {
+            if (keyCode == KeyEvent.VK_W && !changedDir) {
                 changedDir = true;
-                snakeDirection = -2;
-            } else if (keyCode == KeyEvent.VK_S && !changedDir && Math.abs(snakeDirection) == 1) {
+                snakeDirection = snakeDirection.turnUp();
+            } else if (keyCode == KeyEvent.VK_S && !changedDir) {
                 changedDir = true;
-                snakeDirection = 2;
-            } else if (keyCode == KeyEvent.VK_D && !changedDir && Math.abs(snakeDirection) == 2) {
+                snakeDirection = snakeDirection.turnDown();
+            } else if (keyCode == KeyEvent.VK_D && !changedDir) {
                 changedDir = true;
-                snakeDirection = 1;
-            } else if (keyCode == KeyEvent.VK_A && !changedDir && Math.abs(snakeDirection) == 2) {
+                snakeDirection = snakeDirection.turnRight();
+            } else if (keyCode == KeyEvent.VK_A && !changedDir) {
                 changedDir = true;
-                snakeDirection = -1;
+                snakeDirection = snakeDirection.turnLeft();
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 application.setScreen(Screens.PAUSE);
             }
@@ -169,92 +165,32 @@ public class SnakeScreen extends BasicScreen {
 
     public enum SnakeDirection {
         Up {
-            @Override
-            public SnakeDirection turnLeft() {
-                return Left;
-            }
-            @Override
-            public SnakeDirection turnRight() {
-                return Right;
-            }
-            @Override
-            public SnakeDirection turnUp() {
-                return Up;
-            }
-            @Override
-            public SnakeDirection turnDown() {
-                return Up;
-            }
-            @Override
-            public Point delta() {
-                return new Point(0, -1);
-            }
+            public SnakeDirection turnLeft()  { return Left; }
+            public SnakeDirection turnRight() { return Right; }
+            public SnakeDirection turnUp()    { return Up; }
+            public SnakeDirection turnDown()  { return Up; }
+            public Point delta() { return new Point(0, -1); }
         },
         Down {
-            @Override
-            public SnakeDirection turnLeft() {
-                return Left;
-            }
-            @Override
-            public SnakeDirection turnRight() {
-                return Right;
-            }
-            @Override
-            public SnakeDirection turnUp() {
-                return Down;
-            }
-            @Override
-            public SnakeDirection turnDown() {
-                return Down;
-            }
-            @Override
-            public Point delta() {
-                return new Point(0, 1);
-            }
+            public SnakeDirection turnLeft()  { return Left; }
+            public SnakeDirection turnRight() { return Right; }
+            public SnakeDirection turnUp()    { return Down; }
+            public SnakeDirection turnDown()  { return Down; }
+            public Point delta() { return new Point(0, 1); }
         },
         Left {
-            @Override
-            public SnakeDirection turnLeft() {
-                return Left;
-            }
-            @Override
-            public SnakeDirection turnRight() {
-                return Left;
-            }
-            @Override
-            public SnakeDirection turnUp() {
-                return Up;
-            }
-            @Override
-            public SnakeDirection turnDown() {
-                return Down;
-            }
-            @Override
-            public Point delta() {
-                return new Point(-1, 0);
-            }
+            public SnakeDirection turnLeft()  { return Left; }
+            public SnakeDirection turnRight() { return Left; }
+            public SnakeDirection turnUp()    { return Up; }
+            public SnakeDirection turnDown()  { return Down; }
+            public Point delta() { return new Point(-1, 0); }
         },
         Right {
-            @Override
-            public SnakeDirection turnLeft() {
-                return Right;
-            }
-            @Override
-            public SnakeDirection turnRight() {
-                return Right;
-            }
-            @Override
-            public SnakeDirection turnUp() {
-                return Up;
-            }
-            @Override
-            public SnakeDirection turnDown() {
-                return Down;
-            }
-            @Override
-            public Point delta() {
-                return new Point(1, 0);
-            }
+            public SnakeDirection turnLeft()  { return Right; }
+            public SnakeDirection turnRight() { return Right; }
+            public SnakeDirection turnUp()    { return Up; }
+            public SnakeDirection turnDown()  { return Down; }
+            public Point delta() { return new Point(1, 0); }
         };
 
         public abstract SnakeDirection turnLeft();
