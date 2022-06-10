@@ -166,4 +166,101 @@ public class SnakeScreen extends BasicScreen {
 
         appleCandidatePoints.addAll(snakePoints);
     }
+
+    public enum SnakeDirection {
+        Up {
+            @Override
+            public SnakeDirection turnLeft() {
+                return Left;
+            }
+            @Override
+            public SnakeDirection turnRight() {
+                return Right;
+            }
+            @Override
+            public SnakeDirection turnUp() {
+                return Up;
+            }
+            @Override
+            public SnakeDirection turnDown() {
+                return Up;
+            }
+            @Override
+            public Point delta() {
+                return new Point(0, -1);
+            }
+        },
+        Down {
+            @Override
+            public SnakeDirection turnLeft() {
+                return Left;
+            }
+            @Override
+            public SnakeDirection turnRight() {
+                return Right;
+            }
+            @Override
+            public SnakeDirection turnUp() {
+                return Down;
+            }
+            @Override
+            public SnakeDirection turnDown() {
+                return Down;
+            }
+            @Override
+            public Point delta() {
+                return new Point(0, 1);
+            }
+        },
+        Left {
+            @Override
+            public SnakeDirection turnLeft() {
+                return Left;
+            }
+            @Override
+            public SnakeDirection turnRight() {
+                return Left;
+            }
+            @Override
+            public SnakeDirection turnUp() {
+                return Up;
+            }
+            @Override
+            public SnakeDirection turnDown() {
+                return Down;
+            }
+            @Override
+            public Point delta() {
+                return new Point(-1, 0);
+            }
+        },
+        Right {
+            @Override
+            public SnakeDirection turnLeft() {
+                return Right;
+            }
+            @Override
+            public SnakeDirection turnRight() {
+                return Right;
+            }
+            @Override
+            public SnakeDirection turnUp() {
+                return Up;
+            }
+            @Override
+            public SnakeDirection turnDown() {
+                return Down;
+            }
+            @Override
+            public Point delta() {
+                return new Point(1, 0);
+            }
+        };
+
+        public abstract SnakeDirection turnLeft();
+        public abstract SnakeDirection turnRight();
+        public abstract SnakeDirection turnUp();
+        public abstract SnakeDirection turnDown();
+        public abstract Point delta();
+    }
 }
