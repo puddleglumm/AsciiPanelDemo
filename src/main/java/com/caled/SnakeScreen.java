@@ -9,11 +9,15 @@ import java.util.*;
 
 
 public class SnakeScreen extends BasicScreen {
+
+    public final static String BOARD_HEIGHT_PROPERTY_NAME = SnakeScreen.class.getCanonicalName() + ".boardheight";
+    public final static String BOARD_WIDTH_PROPERTY_NAME = SnakeScreen.class.getCanonicalName() + ".boardwidth";
+    public final static String SNAKE_SPEED_PROPERTY_NAME = SnakeScreen.class.getCanonicalName() + ".snakespeed";
     private SnakeDirection snakeDirection;
     int speed = 2;
     private Deque<Point> snakePoints;
-    private final int height = 20;
-    private final int width = 20;
+    private int height = 20;
+    private int width = 20;
     private Point applePos;
     private HashSet<Point> appleCandidatePoints;
     private final Random rng = new Random();
@@ -80,6 +84,10 @@ public class SnakeScreen extends BasicScreen {
 
     @Override
     public void reset() {
+        height = Integer.parseInt(System.getProperty(BOARD_HEIGHT_PROPERTY_NAME, "20"));
+        width = Integer.parseInt(System.getProperty(BOARD_WIDTH_PROPERTY_NAME, "20"));
+        speed = Integer.parseInt(System.getProperty(SNAKE_SPEED_PROPERTY_NAME, "2"));
+
         snakeDirection = SnakeDirection.Right;
         Point start = new Point(width / 4, height / 2);
 
