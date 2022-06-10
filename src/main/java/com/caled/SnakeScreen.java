@@ -12,11 +12,12 @@ public class SnakeScreen extends BasicScreen {
     private int snakeDirection;
     int speed = 2;
     private Deque<Point> snakePoints;
-    private int height = 20;
-    private int width = 20;
+    private final int height = 20;
+    private final int width = 20;
     private Point applePos;
-    private HashSet<Point> allPoints;
-    private Random rng = new Random();
+    private HashSet<Point> appleCandidatePoints;
+    private final Random rng = new Random();
+
 
     SnakeScreen(ScreenedApplication app) {
         super(app);
@@ -84,18 +85,20 @@ public class SnakeScreen extends BasicScreen {
     @Override
     public void reset() {
         snakeDirection = 1;
-        snakePoints = new ArrayDeque<Point>(){{
-            add(new Point(width/4, height/2));
-            add(new Point(1 + (width/4), height/2));
-            add(new Point(2 + (width/4), height/2));
-        }};
+        Point start = new Point(width / 4, height / 2);
 
-        applePos = new Point(3 * (width/4), height/2);
+        snakePoints = new ArrayDeque<>(Arrays.asList(
+            new Point(start.x, start.y),
+            new Point(1 + start.x, start.y),
+            new Point(2 + start.x, start.y)
+        ));
 
-        allPoints = new HashSet<>(width * height);
+        applePos = new Point(3 * start.x, start.y);
+
+        appleCandidatePoints = new HashSet<>(width * height);
         for (int i_x = 0; i_x < width; i_x++) {
             for (int i_y = 0; i_y < height; i_y++) {
-                allPoints.add(new Point(i_x, i_y));
+                appleCandidatePoints.add(new Point(i_x, i_y));
             }
         }
     }
@@ -150,10 +153,10 @@ public class SnakeScreen extends BasicScreen {
     }
 
     private void replaceApple() {
-        allPoints.removeAll(snakePoints);
+        appleCandidatePoints.removeAll(snakePoints);
 
-        int i = rng.nextInt(allPoints.size());
-        for (Point p : allPoints) {
+        int i = rng.nextInt(appleCandidatePoints.size());
+        for (Point p : appleCandidatePoints) {
             i--;
             if (i == 0) {
                 applePos.setLocation(p);
@@ -161,6 +164,6 @@ public class SnakeScreen extends BasicScreen {
             }
         }
 
-        allPoints.addAll(snakePoints);
+        appleCandidatePoints.addAll(snakePoints);
     }
 }
