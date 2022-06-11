@@ -47,6 +47,7 @@ public class SnakeScreen extends BasicScreen {
         processInputs(inputs);
 
         if (!updateSnakePosition()) {
+            Sounds.playSound(Sounds.SNAKE_BOINK);
             String finishScreenTitle = String.format("You finished! Score: %s", snakePoints.size() - 3);
             Screens.goToGameFinishScreen(application, finishScreenTitle);
         }
@@ -73,6 +74,7 @@ public class SnakeScreen extends BasicScreen {
             snakePoints.offer(next);
             if (applePos.equals(next)) {
                 replaceApple();
+                Sounds.playSound(Sounds.SNAKE_MUNCH);
             } else {
                 snakePoints.remove();
             }

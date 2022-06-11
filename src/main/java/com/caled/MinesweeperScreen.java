@@ -124,6 +124,7 @@ public class MinesweeperScreen extends BasicScreen {
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (cannotRevealTileAtCursor()) return;
                 if (board.hasMineAt(cursor.x, cursor.y)) {
+                    Sounds.playSound(Sounds.MS_BOMB_EXPLOSION);
                     Screens.goToGameFinishScreen(application, "You lost");
                     return;
                 }
