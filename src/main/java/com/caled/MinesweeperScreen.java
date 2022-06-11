@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
 import com.github.puddleglumm.minesweeper.*;
 
@@ -13,8 +14,10 @@ public class MinesweeperScreen extends BasicScreen {
     public final static String BOARD_HEIGHT_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".boardheight";
     public final static String BOARD_WIDTH_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".boardwidth";
     public final static String MINECOUNT_PROPERTY_NAME = MinesweeperScreen.class.getCanonicalName() + ".minecount";
+    private static final AsciiFont FONT = new AsciiFont("ms_flag_12x12.png", 12, 12);
     Board board = new Board(20, 20, 21);
     Point cursor = new Point(0, 0);
+    private float timer = 0.0F;
     private final String flagChar = "\u00E2";
     private final String unrevealedTileChar = "#";
     private final String emptyTileChar = ".";
@@ -52,6 +55,8 @@ public class MinesweeperScreen extends BasicScreen {
             Screens.goToGameFinishScreen(application, "You win!");
         }
 
+        timer += 0.1F;
+
         renderBoard(application);
         terminal.repaint();
     }
@@ -65,14 +70,19 @@ public class MinesweeperScreen extends BasicScreen {
         board = new Board(boardHeight, boardWidth, mineCount);
         cursor.x = 0;
         cursor.y = 0;
+        timer = 0.0F;
     }
 
     private void renderBoard(ScreenedApplication app) {
-        int offsetX = app.widthInChars()/2 - board.width();
-        int offsetY = (app.heightInChars() - board.height())/2;
+        int offsetX = (app.widthInChars()/2) - (board.width()/2);
+        int offsetY = (app.heightInChars()/2) - (board.height()/2);
 
-        String scoreDisplay = String.format("Mines: %s    Flags: %s", board.mineCount(), board.flagCount());
-        app.getTerminal().write(scoreDisplay, (board.width() - 11) + offsetX, offsetY - 3, Color.YELLOW);
+        String flagDisplay = String.format("Flags:%3s", board.flagCount());
+        String mineDisplay = String.format("Mines:%3s", board.mineCount());
+        String timeDisplay = String.format("Time :%5.1fs", timer);
+        app.getTerminal().write(flagDisplay, (board.width() - flagDisplay.length())/2 + offsetX, offsetY - 7, Color.YELLOW);
+        app.getTerminal().write(mineDisplay, (board.width() - flagDisplay.length())/2 + offsetX, offsetY - 5, Color.YELLOW);
+        app.getTerminal().write(timeDisplay, (board.width() - flagDisplay.length())/2 + offsetX, offsetY - 3, Color.YELLOW);
 
         for (int i_y = 0; i_y < board.height(); i_y++) {
             for (int i_x = 0; i_x < board.width(); i_x++) {
@@ -81,7 +91,7 @@ public class MinesweeperScreen extends BasicScreen {
                 Color bgColor = app.getTerminal().getDefaultBackgroundColor();
                 if (i_x == cursor.x && i_y == cursor.y) { bgColor = cursorBgColor; }
 
-                app.getTerminal().write(display, (i_x * 2) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
+                app.getTerminal().write(display, (i_x) + offsetX, (i_y) + offsetY, colorForTile.get(display), bgColor);
             }
         }
     }
@@ -112,10 +122,10 @@ public class MinesweeperScreen extends BasicScreen {
                     board.toggleFlagAt(cursor.x, cursor.y);
                 }
             } else if (keyCode == KeyEvent.VK_ENTER) {
-                if (cannotRevealTileAtCursor()) {
-                    return;
-                } else if (board.hasMineAt(cursor.x, cursor.y)) {
+                if (cannotRevealTileAtCursor()) return;
+                if (board.hasMineAt(cursor.x, cursor.y)) {
                     Screens.goToGameFinishScreen(application, "You lost");
+                    return;
                 }
                 board.startRevealAt(cursor.x, cursor.y);
             } else if (input.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -150,5 +160,10 @@ public class MinesweeperScreen extends BasicScreen {
         if (cursor.y > 0) {
             cursor.y -= 1;
         }
+    }
+
+    @Override
+    public AsciiFont getFont() {
+        return FONT;
     }
 }
